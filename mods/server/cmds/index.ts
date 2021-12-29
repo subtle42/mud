@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import {AnyAction, createStore} from 'redux'
 
 interface Option extends OptionInput {
     name: string
@@ -64,17 +65,31 @@ export const buildCmd: BuildCmd = (name, opts, builder?: Function, handler?) => 
             return {option: myOptFn}
         }
         builder && builder({option: myOptFn})
+        Object.assign(tmp, opts)
         tmp.handler = handler as any
     }
     cmdStore.dispatch({ type: 'add', payload: tmp as Cmd})
 }
 
 
-const getCmd = (cmdName: string): Cmd => {
+export const getCmd = (cmdName: string): Cmd => {
     return cmdStore.getState()[cmdName]?.cmd
 }
 
-const handleError = (cmd?: Cmd) => {}
+export const getCmdsInSchool = (school: string): Cmd[] => {
+    const res: Cmd[] = []
+    Object.keys(cmdStore.getState()).forEach(key => {
+        if(cmdStore.getState()[key].cmd.school?.toLowerCase() !== school.toLowerCase()) return
+        res.push(cmdStore.getState()[key].cmd)
+    })
+    return res
+}
+
+const handleError = (cmd?: Cmd) => {
+    return [
+        `${cmd?.name}`
+    ]
+}
 
 const printHelp = (cmd: Cmd) => {
     return `${cmd.name} ${cmd.options.map(o => ` [${o.name}]`)}`
@@ -88,10 +103,9 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
     }
     const cmd = getCmd(res.$0)
     if (!cmd) return ack(`<div style="color:red">Could not find command: ${res.$0}</div>`)
-
     cmd.options.forEach((opt, index) => {
-        if (opt.type && typeof res._[index] !== opt.type) return handleError(cmd)
-        if (opt.validator && !opt.validator(res._[index])) return handleError(cmd)
+        if (opt.type && typeof res._[0] !== opt.type) return handleError(cmd)
+        if (opt.validator && !opt.validator(res._[0])) return handleError(cmd)
         res[opt.name] = res._.shift()
     })
     cmd.handler(res, ack, socket)
@@ -102,9 +116,6 @@ export const getCommdandList = (): string[] => {
         .filter(v => !v.isAlias)
         .map(v => v.cmd.name)
 }
-
-
-import {AnyAction, createStore} from 'redux'
 
 
 class CmdState {

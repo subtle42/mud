@@ -14,6 +14,6 @@ export const TextDisplayComponent: React.FunctionComponent<Props> = (props) => {
         flexDirection: 'column-reverse'
     }
     return <div className='form-control' style={style}>
-        {msgs.map(m => <div dangerouslySetInnerHTML={{__html:m}}></div>)}
+        {msgs.map((m, index) => <div key={index} dangerouslySetInnerHTML={{__html:m}}></div>)}
     </div>
 }

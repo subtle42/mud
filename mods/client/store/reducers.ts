@@ -24,7 +24,7 @@ export const reducers: ReducerMap = {
     },
     addMsg: (store, payload) => {
         if (Array.isArray(payload)) {
-            store.msgs = [...payload, ...store.msgs]
+            store.msgs = [...payload.reverse(), ...store.msgs]
         } else {
             store.msgs = [payload, ...store.msgs]
         }
