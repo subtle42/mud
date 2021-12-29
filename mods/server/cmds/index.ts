@@ -1,3 +1,5 @@
+import { Socket } from 'socket.io';
+
 interface Option extends OptionInput {
     name: string
 }
@@ -16,7 +18,7 @@ interface CmdOpts {
 interface Cmd extends CmdOpts{
     name: string
     options: Option[],
-    handler: (inputs: any) => void
+    handler: BuildHandler
 }
 
 interface CmdBuilder {
@@ -32,17 +34,21 @@ type Arguments<T = {}> = T & {
     [argName: string]: unknown;
 };
 
+interface BuildHandler {
+    (inputs: Arguments, ack: (res: string) => void, socket: Socket): void
+}
+
 interface BuildCmd {
-    (name: string, opts: CmdOpts, builder: (args:CmdBuilder) => void, handler: (inputs: Arguments) => void): void
-    (name: string, builder: (args:CmdBuilder) => void, handler: (inputs: Arguments) => void): void
-    (name: string, opts: CmdOpts, handler: (inputs: Arguments) => void): void
-    (name: string, handler: (inputs: Arguments) => void): void
+    (name: string, opts: CmdOpts, builder: (args:CmdBuilder) => void, handler: BuildHandler): void
+    (name: string, builder: (args:CmdBuilder) => void, handler: BuildHandler): void
+    (name: string, opts: CmdOpts, handler: BuildHandler): void
+    (name: string, handler: BuildHandler): void
 }
 
 export const buildCmd: BuildCmd = (name, opts, builder?: Function, handler?) => {
     const tmp: Partial<Cmd> = {name, options: []}
     if (typeof opts === 'function') {
-        tmp.handler = opts
+        tmp.handler = opts as any
         opts = {}
     } else if (typeof opts === 'object' && builder && !handler) {
         tmp.handler = builder as any
@@ -72,7 +78,7 @@ const printHelp = (cmd: Cmd) => {
     return `${cmd.name} ${cmd.options.map(o => ` [${o.name}]`)}`
 }
 
-export const runCmd = (input: string): Promise<void> | void=> {
+export const runCmd = (input: string, ack: (input: string)=>void, socket: Socket): Promise<void> | void=> {
     const tmp = input.split(' ').filter(x => x !== '')
     const res: Arguments = {
         $0: tmp.shift() || '',
@@ -86,7 +92,7 @@ export const runCmd = (input: string): Promise<void> | void=> {
         if (opt.validator && !opt.validator(res._[index])) return handleError(cmd)
         res[opt.name] = res._.shift()
     })
-    cmd.handler(res)
+    cmd.handler(res, ack, socket)
 }
 
 export const getCommdandList = (): string[] => {
@@ -97,6 +103,7 @@ export const getCommdandList = (): string[] => {
 
 
 import {AnyAction, createStore} from 'redux'
+
 
 class CmdState {
     [key: string]: {

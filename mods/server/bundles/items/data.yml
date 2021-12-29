@@ -1,0 +1,4 @@
+- name: test
+  desc: long desc
+- name: wooden sword
+  desc: A simple wooden sword

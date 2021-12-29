@@ -1,0 +1,13 @@
+type: array
+id: aweawf
+items:
+  properties:
+    name: 
+      type: string
+    desc:
+      type: string
+    weigth:
+      type: number
+  required:
+    - name
+    - desc

@@ -1,9 +1,8 @@
 
 import * as io from 'socket.io'
-import * as cmds from './cmds'
+import { runCmd } from './cmds'
 
-export const createServer = (cmds: any): io.Server => {
-    const cmdKeys = Object.keys(cmds)
+export const createServer = (): io.Server => {
     const server = new io.Server({
         allowRequest: (req, callback) => {
             callback(null, true);
@@ -16,16 +15,9 @@ export const createServer = (cmds: any): io.Server => {
     server.on('connection', client => {
         client.send('connection successful.')
         client.on('cmd', (usrInput: string, ack: (res:string)=>void) => {
-            console.log(usrInput)
             if (!ack) return client.emit('err', `Need ack function`)
-            const usrInputArr = usrInput.split(' ')
-            const usrCmd = usrInputArr.shift() || ''
-            if (!cmdKeys.includes(usrCmd)) {
-                console.log('no cmd', usrInput)
-                return ack(`could not find command: ${usrCmd}`)
-            }
             try {
-                cmds[usrCmd](usrInputArr, ack)
+                runCmd(usrInput, ack, client)
             } catch(e) {
                 console.error(e)
             }
@@ -35,4 +27,6 @@ export const createServer = (cmds: any): io.Server => {
     return server
 }
 
-createServer(cmds).listen(3000)
+import './bundles/rooms'
+
+createServer().listen(3000)
