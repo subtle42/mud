@@ -36,6 +36,14 @@ export const useMsgs = (): string[] => {
     return msgs
 }
 
-window.addEventListener('beforeunload', e => {
-    if (!window.confirm('Are you sure you want to leave?')) e.preventDefault()
-}, false)
+export const useOnlinePlayers = (): string[] => {
+    return []
+}
+
+export const useItemsInRoom = (): string[] => {
+    return []
+}
+
+export const usePlayersInRoom = () => {}
+
+export const useMobsInRoom = () => {}

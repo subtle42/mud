@@ -1,0 +1,24 @@
+type: array
+items:
+  properties:
+    name:
+      type: string
+    desc:
+      type: string
+    fieldType:
+      type: string
+    exits:
+      type: array
+      items:
+        properties:
+          direction:
+            type: string
+          room:
+            type: string
+        required:
+          - direction
+          - room
+  required:
+    - name
+    - desc
+    

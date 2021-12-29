@@ -5,8 +5,10 @@ items:
       type: string
     desc:
       type: string
-    weigth:
-      type: number
+    steps:
+      type: array
+      items:
+        properties:
   required:
     - name
     - desc

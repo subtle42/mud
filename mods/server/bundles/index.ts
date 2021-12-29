@@ -1,14 +1,12 @@
 import { readFile } from 'fs/promises'
-import { validate, Validator } from 'jsonschema'
+import { validate } from 'jsonschema'
 import { parse } from 'yamljs'
 
 
-
-
-export const ingest = (data: string) => {
-    Promise.all([
-        readFile(`${data}/data.yml`, 'utf-8'),
-        readFile(`${data}/schema.yml`, 'utf-8')
+export const ingest = (filepath: string): Promise<any> => {
+    return Promise.all([
+        readFile(`${filepath}/data.yml`, 'utf-8'),
+        readFile(`${filepath}/schema.yml`, 'utf-8')
     ])
     .then(([data, schema]) => {
         data = parse(data)
@@ -17,10 +15,7 @@ export const ingest = (data: string) => {
         if (!results.valid) {
             return Promise.reject(results.errors)
         }
-        console.log('schema is good')
+        return data
     })
     .catch(err => console.error(err))
 }
-
-
-ingest('./items')

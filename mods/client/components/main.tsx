@@ -6,6 +6,7 @@ import { StatusBarsComponent } from './statusBars'
 import { TextDisplayComponent } from './textDisplay'
 import { TextInputComponent } from './textInput'
 import { TopLeftMenuComponent } from './topLeftMenu'
+import { TopRightMenuComponent } from './topRightMenu'
 
 const SIDEBARWIDTH = 300
 
@@ -38,6 +39,9 @@ export const MainComponent: React.FunctionComponent = () => {
                     
                 </td>
                 <td style={{width: SIDEBARWIDTH}}>
+                    <div>
+                        <TopRightMenuComponent />
+                    </div>
                 </td>
             </tr>
         </thead>
