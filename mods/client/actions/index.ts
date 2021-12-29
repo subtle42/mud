@@ -8,7 +8,10 @@ export const sendCmd = (payload: string): void => {
         type: 'addCmd',
         payload
     })
-    client.emit('cmd', payload, res => addMsg(res))
+    client.emit('cmd', payload, res => {
+        console.log('res', res)
+        addMsg(res)
+    })
 }
 
 export const getPrevCmd = (): string => {

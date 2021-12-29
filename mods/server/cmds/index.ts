@@ -66,7 +66,6 @@ export const buildCmd: BuildCmd = (name, opts, builder?: Function, handler?) => 
         builder && builder({option: myOptFn})
         tmp.handler = handler as any
     }
-    console.log(tmp)
     cmdStore.dispatch({ type: 'add', payload: tmp as Cmd})
 }
 
@@ -88,14 +87,13 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
         _: tmp
     }
     const cmd = getCmd(res.$0)
-    if (!cmd) return handleError()
+    if (!cmd) return ack(`<div style="color:red">Could not find command: ${res.$0}</div>`)
 
     cmd.options.forEach((opt, index) => {
         if (opt.type && typeof res._[index] !== opt.type) return handleError(cmd)
         if (opt.validator && !opt.validator(res._[index])) return handleError(cmd)
         res[opt.name] = res._.shift()
     })
-    console.log(cmd)
     cmd.handler(res, ack, socket)
 }
 

@@ -16,6 +16,7 @@ export const createServer = (): io.Server => {
         client.send('connection successful.')
         client.on('cmd', (usrInput: string, ack: (res:string|string[])=>void) => {
             if (!ack) return client.emit('err', `Need ack function`)
+            console.log(usrInput)
             try {
                 runCmd(usrInput, ack, client)
             } catch(e) {
