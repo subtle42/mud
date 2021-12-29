@@ -2,6 +2,15 @@ import { MudStore } from "../store";
 
 type ReducerMap = {[key:string]: (store: MudStore, payload: any)=>MudStore}
 
+interface ISkill {
+    name: string
+    school: string
+    level: string
+    syntax: string
+    worksAgainst: string
+    details: string
+}
+
 export const reducers: ReducerMap = {
     addCmd: (store, payload) => {
         // Do not add duplicate commands

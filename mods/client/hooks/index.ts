@@ -47,3 +47,10 @@ export const useItemsInRoom = (): string[] => {
 export const usePlayersInRoom = () => {}
 
 export const useMobsInRoom = () => {}
+
+export const useSkills = () => {
+    return [{
+        name: 'Survival',
+        level: 'Adept'
+    }]
+}
