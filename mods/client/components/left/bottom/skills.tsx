@@ -1,6 +1,8 @@
 import * as React from 'react'
 import Modal from 'react-bootstrap/Modal'
-import { useSkills } from '../hooks'
+import ListGroup from 'react-bootstrap/ListGroup'
+import ListGroupItem from 'react-bootstrap/ListGroupItem'
+import { useSkills } from '../../../hooks'
 
 
 
@@ -9,14 +11,14 @@ export const SkillsComponent: React.FunctionComponent = () => {
     const skills = useSkills()
 
     const getTable = () => {
-        return <table style={{width: '100%'}}>
-            {skills.map((skill, index) => <div key={index}>
-                <tr onClick={() => setOpen(true)}>
-                    <td style={{width: 150}}>{skill.name}</td>
-                    <td>{skill.level}</td>
-                </tr>
-            </div>)}
-        </table>
+        return <ListGroup style={{width: '100%'}}>
+            {skills.map((skill, index) => <ListGroupItem key={index}
+                action
+                onClick={() => setOpen(true)}>
+                <span style={{width: 150}}>{skill.name}</span>
+                <span>{skill.level}</span>
+            </ListGroupItem>)}
+        </ListGroup>
     }
 
     const getModal = () => {

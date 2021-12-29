@@ -23,7 +23,11 @@ export const reducers: ReducerMap = {
         return store
     },
     addMsg: (store, payload) => {
-        store.msgs = [payload, ...store.msgs]
+        if (Array.isArray(payload)) {
+            store.msgs = [...payload, ...store.msgs]
+        } else {
+            store.msgs = [payload, ...store.msgs]
+        }
         return store
     }
 }

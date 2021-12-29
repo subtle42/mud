@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Form from 'react-bootstrap/Form'
-import { getNextCmd, getPrevCmd, sendCmd } from '../actions'
+import { getNextCmd, getPrevCmd, sendCmd } from '../../actions'
 
 interface Props {
     style?: React.CSSProperties

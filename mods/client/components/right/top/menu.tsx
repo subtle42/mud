@@ -5,7 +5,7 @@ import { FaArchway, FaUsers } from 'react-icons/fa'
 import { RoomInfoComponent } from './roomInfo'
 
 
-export const TopRightMenuComponent: React.FunctionComponent = () => {
+export const RightTopMenuComponent: React.FunctionComponent = () => {
 
     return <Tabs>
     <Tab title={<FaArchway color='white' />} eventKey="room">

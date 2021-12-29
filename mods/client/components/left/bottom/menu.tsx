@@ -6,7 +6,7 @@ import { GiKnapsack } from 'react-icons/gi'
 import { SkillsComponent } from './skills'
 
 
-export const BottomLeftMenuComponent: React.FunctionComponent = () => {
+export const LeftBottomMenuComponent: React.FunctionComponent = () => {
     return <Tabs>
         <Tab style={{height:400}} title={<FaUser color='white' />} eventKey="character">
             map

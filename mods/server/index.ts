@@ -14,7 +14,7 @@ export const createServer = (): io.Server => {
     })
     server.on('connection', client => {
         client.send('connection successful.')
-        client.on('cmd', (usrInput: string, ack: (res:string)=>void) => {
+        client.on('cmd', (usrInput: string, ack: (res:string|string[])=>void) => {
             if (!ack) return client.emit('err', `Need ack function`)
             try {
                 runCmd(usrInput, ack, client)
@@ -27,6 +27,7 @@ export const createServer = (): io.Server => {
     return server
 }
 
-import './bundles/rooms'
+// import './bundles/rooms'
+import './bundles/skills'
 
 createServer().listen(3000)

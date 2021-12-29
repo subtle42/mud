@@ -1,0 +1,12 @@
+- name: Brawling
+  school: Survival
+  syntax: KICK <target>\n PUNCH <target>\n HEADSLAM <target>
+  worksAgainst: Adventurers and denizens
+  cooldown: 3
+  details: Enter into basic hand-to-hand combat! These moves are especially recommended for the youths of the realm who have not yet learned any of the more powerful class skills for combat.
+- name: Fishing
+  school: Survival
+  worksAgainst: Room
+  details: Fishing is a complicated subject that has its own help file:\ HELP FISHING. Know, however, that the higher your survival skill rises the greater will be your chance of successfully hooking a fish.
+
+

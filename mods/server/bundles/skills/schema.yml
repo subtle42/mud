@@ -1,0 +1,20 @@
+type: array
+items:
+  properties:
+    name:
+      type: string
+    school:
+      type: string
+    syntax:
+      type: string
+    worksAgainst:
+      type: string
+    details:
+      type: string
+    cooldown:
+      type: number
+  required:
+    - name
+    - school
+    - details
+    - worksAgainst

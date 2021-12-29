@@ -8,11 +8,13 @@ interface OptionInput {
     desc?: string
     validator?: (input: string | number) => boolean
     type?: string
+    demand?: boolean
 }
 
 interface CmdOpts {
     alias?: string | string[],
     desc?: string
+    school?: string
 }
 
 interface Cmd extends CmdOpts{
@@ -35,7 +37,7 @@ type Arguments<T = {}> = T & {
 };
 
 interface BuildHandler {
-    (inputs: Arguments, ack: (res: string) => void, socket: Socket): void
+    (inputs: Arguments, ack: (res: string|string[]) => void, socket: Socket): void
 }
 
 interface BuildCmd {
@@ -62,8 +64,9 @@ export const buildCmd: BuildCmd = (name, opts, builder?: Function, handler?) => 
             return {option: myOptFn}
         }
         builder && builder({option: myOptFn})
+        tmp.handler = handler as any
     }
-    
+    console.log(tmp)
     cmdStore.dispatch({ type: 'add', payload: tmp as Cmd})
 }
 
@@ -78,7 +81,7 @@ const printHelp = (cmd: Cmd) => {
     return `${cmd.name} ${cmd.options.map(o => ` [${o.name}]`)}`
 }
 
-export const runCmd = (input: string, ack: (input: string)=>void, socket: Socket): Promise<void> | void=> {
+export const runCmd = (input: string, ack: (input: string | string[])=>void, socket: Socket): Promise<void> | void=> {
     const tmp = input.split(' ').filter(x => x !== '')
     const res: Arguments = {
         $0: tmp.shift() || '',
@@ -92,6 +95,7 @@ export const runCmd = (input: string, ack: (input: string)=>void, socket: Socket
         if (opt.validator && !opt.validator(res._[index])) return handleError(cmd)
         res[opt.name] = res._.shift()
     })
+    console.log(cmd)
     cmd.handler(res, ack, socket)
 }
 
