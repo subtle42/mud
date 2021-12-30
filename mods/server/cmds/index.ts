@@ -25,7 +25,7 @@ interface Cmd extends CmdOpts{
 }
 
 interface CmdBuilder {
-    option: (name: string, builder: OptionInput) => CmdBuilder
+    option: (name: string, builder?: OptionInput) => CmdBuilder
 }
 
 type Arguments<T = {}> = T & {
@@ -48,17 +48,22 @@ interface BuildCmd {
     (name: string, handler: BuildHandler): void
 }
 
-export const buildCmd: BuildCmd = (name, opts, builder?: Function, handler?) => {
+export const buildCmd: BuildCmd = (name, opts: any, builder?: Function, handler?) => {
     const tmp: Partial<Cmd> = {name, options: []}
-    if (typeof opts === 'function') {
+    
+    if (typeof opts === 'function' && !builder) {
         tmp.handler = opts as any
         opts = {}
     } else if (typeof opts === 'object' && builder && !handler) {
         tmp.handler = builder as any
+        Object.assign(tmp, opts)
     } else if (typeof opts === 'function' && typeof builder === 'function') {
         tmp.handler = builder as any
-        builder = opts
-        opts = {}
+        const myOptFn = (name: string, opt: OptionInput) => {
+            tmp.options?.push({...opt, name})
+            return {option: myOptFn}
+        }
+        opts({option: myOptFn})
     } else {
         const myOptFn = (name: string, opt: OptionInput) => {
             tmp.options?.push({...opt, name})
@@ -68,11 +73,21 @@ export const buildCmd: BuildCmd = (name, opts, builder?: Function, handler?) => 
         Object.assign(tmp, opts)
         tmp.handler = handler as any
     }
+    if (cmdStore.getState()[name]) throw new Error(`buildCmd duplicate cmd: ${name}`)
+    if (tmp.alias && typeof tmp.alias === 'string' && cmdStore.getState()[tmp.alias]) {
+        throw new Error(`buildCmd duplicate cmd: ${name}`)
+    }
+    if (tmp.alias && Array.isArray(tmp.alias)) {
+        tmp.alias.forEach(a => {
+            if (!cmdStore.getState()[a]) return
+            throw new Error(`buildCmd duplicate cmd: ${name}`)
+        })
+    }
     cmdStore.dispatch({ type: 'add', payload: tmp as Cmd})
 }
 
 
-export const getCmd = (cmdName: string): Cmd => {
+const getCmd = (cmdName: string): Cmd => {
     return cmdStore.getState()[cmdName]?.cmd
 }
 
@@ -104,20 +119,17 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
     const cmd = getCmd(res.$0)
     if (!cmd) return ack(`<div style="color:red">Could not find command: ${res.$0}</div>`)
     if (res.$0 !== cmd.name) res.$0 = cmd.name
-    cmd.options.forEach((opt, index) => {
+    // while(tmp.length > 0) {
+    //     tmp.shift()
+    // }
+
+    cmd.options.forEach(opt => {
         if (opt.type && typeof res._[0] !== opt.type) return handleError(cmd)
         if (opt.validator && !opt.validator(res._[0])) return handleError(cmd)
         res[opt.name] = res._.shift()
     })
     cmd.handler(res, ack, socket)
 }
-
-export const getCommdandList = (): string[] => {
-    return Object.values(cmdStore.getState())
-        .filter(v => !v.isAlias)
-        .map(v => v.cmd.name)
-}
-
 
 class CmdState {
     [key: string]: {
