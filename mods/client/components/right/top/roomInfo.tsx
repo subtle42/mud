@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Collapse from 'react-bootstrap/Collapse'
 import { FaPlusCircle, FaMinusCircle } from 'react-icons/fa'
+import { useSideWindowHeight, useWindowDim } from '../../../hooks'
 
 const currRoom = () => ''
 const usePlayersInRoom = () => {
@@ -25,16 +26,17 @@ const Expandable:React.FunctionComponent<ExpandOpts> = (props) => {
     const {label, list} = props
     
     const getExpandIcon = (isOpen: boolean): JSX.Element => {
-        if (!isOpen) return <FaPlusCircle color='yellow' />
-        return <FaMinusCircle color='yellow' />
+        if (!isOpen) return <FaPlusCircle color='red' />
+        return <FaMinusCircle color='red' />
     }
     
     return <div>
         <div onClick={() => setOpen(!isOpen)}
-            aria-controls={label}>
+            aria-controls={label}
+            style={{color: 'yellow'}}>
         {getExpandIcon(isOpen)} {label}</div>
         <Collapse in={isOpen}>
-            <div id={label}>{
+            <div id={label} style={{color: 'gold'}}>{
                 list.map(p => <div>{p}</div>)
             }</div>
         </Collapse>
@@ -44,8 +46,9 @@ const Expandable:React.FunctionComponent<ExpandOpts> = (props) => {
 export const RoomInfoComponent: React.FunctionComponent = () => {
     const players = usePlayersInRoom()
     const items = useItemsInRoom()
+    const height = useSideWindowHeight()
 
-    return <div>
+    return <div style={{height, overflowY: 'scroll'}}>
         <Expandable label="Players" list={players} />
         <Expandable label="Mobs" list={players} />
         <Expandable label="Items" list={items} />

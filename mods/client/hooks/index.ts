@@ -20,6 +20,22 @@ export const useWindowDim = (): {x: number, y: number} => {
     return dims
 }
 
+const calcSideWindow = (): number => {
+    return (getWindowDim().y/2)-70
+}
+
+export const useSideWindowHeight = (): number => {
+    const [height, setHeight] = React.useState(calcSideWindow())
+
+    React.useEffect(() => {
+        const handleResize = () => setHeight(calcSideWindow())
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
+
+    return height
+}
+
 export const useMsgs = (): string[] => {
     const [msgs, setMsgs] = React.useState(store.getState().msgs)
 

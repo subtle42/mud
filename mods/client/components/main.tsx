@@ -3,6 +3,7 @@ import { useWindowDim } from '../hooks'
 import { CenterMenuComponent } from './center/menu'
 import { LeftBottomMenuComponent } from './left/bottom/menu'
 import { LeftTopMenuComponent } from './left/top/menu'
+import { RightBottomMenuComponent } from './right/bottom/menu'
 import { RightTopMenuComponent } from './right/top/menu'
 
 
@@ -30,16 +31,14 @@ export const MainComponent: React.FunctionComponent = () => {
                 <td>
                     <div style={{display: 'flex', flexDirection: 'column'}}>
                         <CenterMenuComponent />
-                        {/* <TextDisplayComponent style={{...midStyle, marginBottom: 10}} />
-                        <StatusBarsComponent />
-                        <ActionBtnsComponent style={midStyle} />
-                        <TextInputComponent style={midStyle} /> */}
                     </div>
-                    
                 </td>
                 <td style={{width: SIDEBARWIDTH}}>
-                    <div>
+                    <div style={{height: '50%'}}>
                         <RightTopMenuComponent />
+                    </div>
+                    <div style={{height: '50%'}}>
+                        <RightBottomMenuComponent />
                     </div>
                 </td>
             </tr>

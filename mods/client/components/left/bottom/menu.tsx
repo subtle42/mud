@@ -7,8 +7,8 @@ import { SkillsComponent } from './skills'
 
 
 export const LeftBottomMenuComponent: React.FunctionComponent = () => {
-    return <Tabs>
-        <Tab style={{height:400}} title={<FaUser color='white' />} eventKey="character">
+    return <Tabs className='mud-tabs'>
+        <Tab title={<FaUser color='white' />} eventKey="character">
             map
         </Tab>
         <Tab title={<FaBookOpen color='white' />} eventKey="skills">

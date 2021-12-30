@@ -11,6 +11,7 @@ export const TextDisplayComponent: React.FunctionComponent<Props> = (props) => {
     const style: React.CSSProperties = {...props.style,
         height: height,
         display: 'flex',
+        overflowY: 'scroll',
         flexDirection: 'column-reverse'
     }
     return <div className='form-control' style={style}>

@@ -6,7 +6,7 @@ import { FaGlobe } from 'react-icons/fa'
 
 export const LeftTopMenuComponent: React.FunctionComponent = () => {
 
-    return <Tabs>
+    return <Tabs className='mud-tabs'>
         <Tab title={<FaGlobe color='white' />} eventKey="map">
             map
         </Tab>

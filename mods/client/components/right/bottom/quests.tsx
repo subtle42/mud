@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Collapse from 'react-bootstrap/Collapse'
+import { useSideWindowHeight } from '../../../hooks'
 
 const useQuests = () => {
     return []
@@ -7,8 +8,9 @@ const useQuests = () => {
 
 export const QuestComponent: React.FunctionComponent = () => {
     const quests = useQuests()
+    const height = useSideWindowHeight()
 
-    return <div>
+    return <div style={{height}}>
 
     </div>
 }

@@ -7,7 +7,7 @@ import { RoomInfoComponent } from './roomInfo'
 
 export const RightTopMenuComponent: React.FunctionComponent = () => {
 
-    return <Tabs>
+    return <Tabs className='mud-tabs'>
     <Tab title={<FaArchway color='white' />} eventKey="room">
         <RoomInfoComponent />
     </Tab>
