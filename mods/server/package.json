@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon ./index.ts --inspect=5858",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "dependencies": {
     "@types/node": "^16.11.13",
@@ -20,7 +21,15 @@
     "yamljs": "^0.3.0",
     "yargs": "^17.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-typescript": "^7.16.5",
+    "@types/jest": "^27.0.3",
+    "@types/sinon": "^10.0.6",
+    "jest": "^27.4.5",
+    "sinon": "^12.0.1"
+  },
   "nodemonConfig": {
     "restartable": "rs",
     "ignore": [
@@ -32,5 +41,18 @@
       "ts": "node -r ts-node/register"
     },
     "ext": "ts"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
   }
 }

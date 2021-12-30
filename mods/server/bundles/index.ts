@@ -19,3 +19,7 @@ export const ingest = (filepath: string): Promise<any> => {
     })
     .catch(err => console.error(err))
 }
+
+export const handleError = (msg: string, ack: Function): void => {
+    ack(`<div style="color:red">${msg}</div>`)
+}

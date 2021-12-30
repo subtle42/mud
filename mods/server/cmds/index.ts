@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import {AnyAction, createStore} from 'redux'
+import {AnyAction, createStore, Reducer} from 'redux'
 
 interface Option extends OptionInput {
     name: string
@@ -103,6 +103,7 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
     }
     const cmd = getCmd(res.$0)
     if (!cmd) return ack(`<div style="color:red">Could not find command: ${res.$0}</div>`)
+    if (res.$0 !== cmd.name) res.$0 = cmd.name
     cmd.options.forEach((opt, index) => {
         if (opt.type && typeof res._[0] !== opt.type) return handleError(cmd)
         if (opt.validator && !opt.validator(res._[0])) return handleError(cmd)
@@ -129,7 +130,15 @@ interface myAction extends AnyAction {
     payload: Cmd
 }
 
-const cmdStore = createStore((state: CmdState=new CmdState(), action: myAction) => {
+// Should reset the store
+const rootReducer = (state: any, action: any) => {
+    if (action.type === 'RESET') {
+        state = undefined
+    }
+    return cmdReducers(state, action)
+}
+
+const cmdReducers = (state: CmdState=new CmdState(), action: myAction) => {
     if (action.type === 'add') {
         state = {...state}
         state[action.payload.name] = {cmd: action.payload}
@@ -140,5 +149,8 @@ const cmdStore = createStore((state: CmdState=new CmdState(), action: myAction) 
         }
     }
     return state
-})
+}
+
+export const cmdStore = createStore(rootReducer)
+
 
