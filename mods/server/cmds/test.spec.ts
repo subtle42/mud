@@ -101,7 +101,30 @@ describe('runCmd', () => {
     })
 
     describe('options', () => {
-        it.todo('should run the typeof check')
+        describe('demand', () => {
+            const taskName = 'awelkawef'
+            let handlerStub: SinonStub
+            beforeEach(() => {
+                handlerStub = sandbox.stub()
+                cmd.buildCmd(taskName, args => {
+                    args.option('opt', {demand:true})
+                }, handlerStub)
+            })
+            it('should call ack with an error', () => {
+                const ackStub = sandbox.stub()
+                cmd.runCmd(taskName, ackStub, {} as any)
+                expect(ackStub.calledOnce).toEqual(true)
+            })
+            it('should NOT call handler', () => {
+                cmd.runCmd(taskName, emptyFn, {} as any)
+                expect(handlerStub.calledOnce).toEqual(false)
+            })
+            it('should call the handler', () => {
+                cmd.runCmd(`${taskName} lkawef lawj`, emptyFn, {} as any)
+                expect(handlerStub.calledOnce).toEqual(true)
+            })
+        })
+
         describe('validator fn', () => {
             it('should run validator if it exists', () => {
                 const validStub = stub().returns(() => true)
@@ -135,8 +158,21 @@ describe('runCmd', () => {
                 })
             })
             describe('if the validator return true', () => {
-                it.todo('should call the handler')
+                it('should call the handler', () => {
+                    const cmdName = 'awefawef'
+                    const myStub = sandbox.stub()
+                    cmd.buildCmd(cmdName, args => args.option('aweff', {
+                        validator: () => true
+                    }), myStub)
+                    cmd.runCmd(`${cmdName} awf awef`, emptyFn, {} as any)
+                    expect(myStub.calledOnce).toBe(true)
+                })
             })
+        })
+
+        describe('type', () => {
+            it.todo('should call handler on success')
+            it.todo('should call ack on failuer')
         })
     })
 
