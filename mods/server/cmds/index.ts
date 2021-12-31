@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import {AnyAction, createStore, Reducer} from 'redux'
+import { options } from 'yargs';
 
 interface Option extends OptionInput {
     name: string
@@ -119,16 +120,20 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
     const cmd = getCmd(res.$0)
     if (!cmd) return ack(`<div style="color:red">Could not find command: ${res.$0}</div>`)
     if (res.$0 !== cmd.name) res.$0 = cmd.name
-    // while(tmp.length > 0) {
-    //     tmp.shift()
-    // }
-
-    cmd.options.forEach(opt => {
-        if (opt.type && typeof res._[0] !== opt.type) return handleError(cmd)
-        if (opt.validator && !opt.validator(res._[0])) return handleError(cmd)
-        res[opt.name] = res._.shift()
-    })
-    cmd.handler(res, ack, socket)
+    try {
+        for(let i=0; i<cmd.options.length; i++) {
+            const opt = cmd.options[i]
+            const val = tmp[i]
+            if (opt.demand && !val) throw new Error('')
+            if (!val) return
+            if (opt.validator && !opt.validator(val)) throw new Error('err')
+            if (opt.type && typeof val === opt.type) throw new Error('')
+            res[opt.name] = res._.shift()
+        }
+        cmd.handler(res, ack, socket)
+    } catch (e) {
+        return ack('error')
+    }
 }
 
 class CmdState {

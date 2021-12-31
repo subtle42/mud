@@ -1,5 +1,5 @@
 import * as cmd from '.'
-import { mock, SinonMock } from 'sinon'
+import { mock, stub, createSandbox, SinonStub, SinonMock} from 'sinon'
 
 const emptyFn = () => {}
 
@@ -84,7 +84,9 @@ describe('buildCmd', () => {
 })
 
 describe('runCmd', () => {
+    const sandbox = createSandbox()
     afterEach(() => {
+        sandbox.reset()
         cmd.cmdStore.dispatch({type: 'RESET'})
     })
 
@@ -100,7 +102,42 @@ describe('runCmd', () => {
 
     describe('options', () => {
         it.todo('should run the typeof check')
-        it.todo('should run validator if it exists')
+        describe('validator fn', () => {
+            it('should run validator if it exists', () => {
+                const validStub = stub().returns(() => true)
+                const cmdName = 'test'
+    
+                cmd.buildCmd(cmdName, args => args.option('opt', {
+                    validator: validStub
+                }), emptyFn)
+                cmd.runCmd(`${cmdName} awefg`, emptyFn, {} as  any)
+                expect(validStub.calledOnce).toBe(true)
+            })
+            describe('if validator returns false', () => {
+                let validStub: SinonStub
+                let handlerStub: SinonStub
+                const cmdName= 'notvalidoption'
+                beforeEach(() => {
+                    validStub = sandbox.stub().returns(false)
+                    handlerStub = sandbox.stub()
+                    cmd.buildCmd(cmdName, args => args.option('asd', {
+                        validator: validStub
+                    }), handlerStub)
+                })
+                it('should call ack with error', () => {
+                    const ackMock = sandbox.stub()
+                    cmd.runCmd(`${cmdName} another`, ackMock, {} as any)
+                    expect(ackMock.calledOnce).toBe(true)
+                })
+                it('should NOT call the handler', () => {
+                    cmd.runCmd(`${cmdName} asdf asf`, emptyFn, {} as any)
+                    expect(handlerStub.calledOnce).toBe(false)
+                })
+            })
+            describe('if the validator return true', () => {
+                it.todo('should call the handler')
+            })
+        })
     })
 
     describe('handler function', () => {
