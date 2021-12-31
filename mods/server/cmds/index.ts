@@ -1,6 +1,5 @@
 import { Socket } from 'socket.io';
-import {AnyAction, createStore, Reducer} from 'redux'
-import { options } from 'yargs';
+import {AnyAction, createStore } from 'redux'
 
 interface Option extends OptionInput {
     name: string
@@ -99,16 +98,6 @@ export const getCmdsInSchool = (school: string): Cmd[] => {
         res.push(cmdStore.getState()[key].cmd)
     })
     return res
-}
-
-const handleError = (cmd?: Cmd) => {
-    return [
-        `${cmd?.name}`
-    ]
-}
-
-const printHelp = (cmd: Cmd) => {
-    return `${cmd.name} ${cmd.options.map(o => ` [${o.name}]`)}`
 }
 
 export const runCmd = (input: string, ack: (input: string | string[])=>void, socket: Socket): Promise<void> | void=> {
