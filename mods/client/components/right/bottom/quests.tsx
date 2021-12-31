@@ -11,6 +11,6 @@ export const QuestComponent: React.FunctionComponent = () => {
     const height = useSideWindowHeight()
 
     return <div style={{height}}>
-
+        quests
     </div>
 }

@@ -21,7 +21,7 @@ export const useWindowDim = (): {x: number, y: number} => {
 }
 
 const calcSideWindow = (): number => {
-    return (getWindowDim().y/2)-70
+    return (getWindowDim().y/2)-80
 }
 
 export const useSideWindowHeight = (): number => {

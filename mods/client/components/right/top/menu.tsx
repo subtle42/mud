@@ -3,6 +3,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import { FaArchway, FaUsers } from 'react-icons/fa'
 import { RoomInfoComponent } from './roomInfo'
+import { WhoOnlineComponent } from './whoOnline'
 
 
 export const RightTopMenuComponent: React.FunctionComponent = () => {
@@ -12,7 +13,7 @@ export const RightTopMenuComponent: React.FunctionComponent = () => {
         <RoomInfoComponent />
     </Tab>
     <Tab title={<FaUsers color='white' />} eventKey="who">
-        <RoomInfoComponent />
+        <WhoOnlineComponent />
     </Tab>
 </Tabs>
 }

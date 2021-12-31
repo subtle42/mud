@@ -2,13 +2,14 @@ import * as React from 'react'
 import Modal from 'react-bootstrap/Modal'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ListGroupItem from 'react-bootstrap/ListGroupItem'
-import { useSkills } from '../../../hooks'
+import { useSideWindowHeight, useSkills } from '../../../hooks'
 
 
 
 export const SkillsComponent: React.FunctionComponent = () => {
     const [isOpen, setOpen] = React.useState(false)
     const skills = useSkills()
+    const height = useSideWindowHeight()
 
     const getTable = () => {
         return <ListGroup style={{width: '100%'}}>
@@ -28,8 +29,8 @@ export const SkillsComponent: React.FunctionComponent = () => {
         </Modal>
     }
 
-    return <>
+    return <div style={{height}}>
         {getTable()}
         {getModal()}
-    </>
+    </div>
 }

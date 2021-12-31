@@ -34,10 +34,10 @@ export const MainComponent: React.FunctionComponent = () => {
                     </div>
                 </td>
                 <td style={{width: SIDEBARWIDTH}}>
-                    <div style={{height: '50%'}}>
+                    <div style={{height: '50%', paddingTop: 10, paddingLeft: 10, paddingRight:10, paddingBottom: 5}}>
                         <RightTopMenuComponent />
                     </div>
-                    <div style={{height: '50%'}}>
+                    <div style={{height: '50%', paddingTop: 5, paddingLeft: 10, paddingRight:10, paddingBottom: 10}}>
                         <RightBottomMenuComponent />
                     </div>
                 </td>

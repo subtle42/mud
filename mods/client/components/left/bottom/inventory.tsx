@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { useSideWindowHeight } from '../../../hooks'
 
-export const MapComponent: React.FunctionComponent = () => {
+export const InventoryComponent: React.FunctionComponent = () => {
     const height = useSideWindowHeight()
-    return <div style={{height}}>Map</div>
+
+    return <div style={{height}}>Inventory</div>
 }
