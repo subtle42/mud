@@ -61,7 +61,6 @@ buildCmd('skill', {
     })
 }, (inputs, ack) => {
     const {skill, school} = inputs
-    console.log(skill, school)
     if (!skill && !school) {
         return ack(getMySkillSchools())
     }

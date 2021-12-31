@@ -115,7 +115,7 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
     const tmp = input.split(' ').filter(x => x !== '')
     const res: Arguments = {
         $0: tmp.shift() || '',
-        _: tmp
+        _: [...tmp]
     }
     const cmd = getCmd(res.$0)
     if (!cmd) return ack(`<div style="color:red">Could not find command: ${res.$0}</div>`)
@@ -124,15 +124,15 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
         for(let i=0; i<cmd.options.length; i++) {
             const opt = cmd.options[i]
             const val = tmp[i]
-            if (opt.demand && !val) throw new Error('')
-            if (!val) return
-            if (opt.validator && !opt.validator(val)) throw new Error('err')
-            if (opt.type && typeof val === opt.type) throw new Error('')
+            if (opt.demand && !val) throw new Error('demand')
+            if (!val) continue
+            if (opt.validator && !opt.validator(val)) throw new Error('validator fn')
+            if (opt.type && typeof val !== opt.type) throw new Error('typeof')
             res[opt.name] = res._.shift()
         }
         cmd.handler(res, ack, socket)
     } catch (e) {
-        return ack('error')
+        ack(JSON.stringify(e))
     }
 }
 

@@ -2,9 +2,9 @@ import { store } from "../store"
 import {connect} from 'socket.io-client'
 
 const client = connect("localhost:3000", {
-    auth: {
-        token: ''
-    },
+    // auth: {
+    //     token: ''
+    // },
 })
 
 export const sendCmd = (payload: string): void => {
