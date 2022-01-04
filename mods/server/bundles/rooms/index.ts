@@ -5,9 +5,9 @@ interface Room {
     name: string
     exits: {direction: string, roomId: string}[]
     desc: string
-    items: string[]
-    mobs: string[]
-    player: string[]
+    // items: string[]
+    // mobs: string[]
+    // player: string[]
 }
 
 interface Player {
@@ -15,16 +15,43 @@ interface Player {
     room: string
 }
 
+const getPlayerRoom = (name: string) => 'testroom'
 
-ingest('./')
-.then(res => {
-})
+const myRooms: {[key:string]: Room} = {
+    testroom :{
+    name: 'testroom',
+    exits: [{direction: 'north', roomId: 'northRoom'}],
+    desc: 'the first room',
+}, northRoom:{
+    name: 'northRoom',
+    exits: [{direction: 'south', roomId: 'testroom'}],
+    desc: 'the second room',
+}}
 
-const getPlayerRoom = (name: string) => 'asdf'
-
-const getRoom = (roomId: string): Room => ({} as any)
+const getRoom = (roomId: string): Room=> {
+    return myRooms[roomId]
+}
 
 const movePlayer = (playerId: string, roomId: string): void => {}
+
+buildCmd('glance', {
+    desc: 'Look at an adjacent room',
+}, args => {
+    args.option('direction', {
+        demand: true
+    })
+}, (inputs, ack, socket) => {
+    const {direction} = inputs
+    const player = socket.data.player
+    const connection = getRoom(getPlayerRoom(player))
+        .exits
+        .find(e => e.direction === direction)
+
+    if (!connection) {
+        return handleError(`No exit towards the ${inputs.direction}.`, ack)
+    }
+    ack(getRoom(connection.roomId).desc)
+})
 
 
 buildCmd('north', {

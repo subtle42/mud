@@ -113,10 +113,10 @@ export const runCmd = (input: string, ack: (input: string | string[])=>void, soc
         for(let i=0; i<cmd.options.length; i++) {
             const opt = cmd.options[i]
             const val = tmp[i]
-            if (opt.demand && !val) throw new Error('demand')
+            if (opt.demand && !val) return ack(`${res.$0} ${cmd.options.map(o => `[${o.name}]`).join(' ')}`)
             if (!val) continue
-            if (opt.validator && !opt.validator(val)) throw new Error('validator fn')
-            if (opt.type && typeof val !== opt.type) throw new Error('typeof')
+            if (opt.validator && !opt.validator(val)) return ack('validator fn')
+            if (opt.type && typeof val !== opt.type) return ack('typeof')
             res[opt.name] = res._.shift()
         }
         cmd.handler(res, ack, socket)

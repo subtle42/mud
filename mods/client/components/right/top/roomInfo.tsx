@@ -6,7 +6,7 @@ import { useSideWindowHeight, useWindowDim } from '../../../hooks'
 const currRoom = () => ''
 const usePlayersInRoom = () => {
     const [players, setPlayers] = React.useState([
-        'daniel', 'pamela'
+        'daniel', 'pamela',
     ]) 
     return players
 }
@@ -34,7 +34,7 @@ const Expandable:React.FunctionComponent<ExpandOpts> = (props) => {
         <div onClick={() => setOpen(!isOpen)}
             aria-controls={label}
             style={{color: 'yellow'}}>
-        {getExpandIcon(isOpen)} {label}</div>
+        <b>{getExpandIcon(isOpen)} {label}</b></div>
         <Collapse in={isOpen}>
             <div id={label} style={{color: 'gold'}}>{
                 list.map(p => <div>{p}</div>)
