@@ -6,6 +6,7 @@ const client = connect("localhost:3000", {
     //     token: ''
     // },
 })
+client.on('msg', res => addMsg(res))
 
 export const sendCmd = (payload: string): void => {
     store.dispatch({

@@ -34,6 +34,15 @@ const getRoom = (roomId: string): Room=> {
 
 const movePlayer = (playerId: string, roomId: string): void => {}
 
+const getRoomDescription = (roomdId: string): string[] => {
+    const room = myRooms[roomdId]
+    return [
+        room.name,
+        room.desc,
+        room.exits.map(e =>  e.direction).join(', ')
+    ]
+}
+
 buildCmd('glance', {
     desc: 'Look at an adjacent room',
 }, args => {
@@ -43,11 +52,15 @@ buildCmd('glance', {
 }, (inputs, ack, socket) => {
     const {direction} = inputs
     const player = socket.data.player
-    const connection = getRoom(getPlayerRoom(player))
+    const playerRoom = getPlayerRoom(player)
+    const connection = getRoom(playerRoom)
         .exits
         .find(e => e.direction === direction)
 
     if (!connection) {
+        socket.emit('msg', getRoomDescription(playerRoom))
+        // ack(getRoomDescription(playerRoom))
+
         return handleError(`No exit towards the ${inputs.direction}.`, ack)
     }
     ack(getRoom(connection.roomId).desc)
