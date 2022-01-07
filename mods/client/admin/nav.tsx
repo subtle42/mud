@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Container from 'react-bootstrap/Container'
@@ -10,8 +11,12 @@ export const NavComponent: React.FunctionComponent = () => {
             <Navbar.Toggle aria-controls="basic-nav" />
             <Navbar.Collapse id="basic-nav">
                 <Nav className='me-auto'>
-                    <Nav.Link>Zones</Nav.Link>
-                    <Nav.Link>Rooms</Nav.Link>
+                    <div className='nav-link'>
+                        <Link to="/">Zones</Link>
+                    </div>
+                    <div className='nav-link'>
+                        <Link to="/rooms">Rooms</Link>
+                    </div>
                     <Nav.Link>Items</Nav.Link>
                     <Nav.Link>Mobs</Nav.Link>
                 </Nav>

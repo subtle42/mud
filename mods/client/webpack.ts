@@ -56,7 +56,8 @@ if (args.includes('admin')) {
     })
      new WebpackDevServer({
         port: 9001,
-        open: true
+        open: true,
+        historyApiFallback: true
     }, webpack(admin))
     .start()
 }

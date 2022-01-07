@@ -44,7 +44,7 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
     }
 
     const renderListItem = (item) => {
-        return <ListGroupItem style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center'}}>
+        return <ListGroupItem key={item} style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center'}}>
             {item}
             <div>
                 <Button variant="outline-info">
