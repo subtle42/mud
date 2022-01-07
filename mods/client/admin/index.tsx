@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { render } from 'react-dom'
-import { RoomFormComponent } from './room'
-
-import '../style.sass'
+import { ZoneFormComponent } from './zone'
+import './admin.style.sass'
+import { NavComponent } from './nav'
 
 render( <div>
-    <RoomFormComponent />
+    <NavComponent />
+    <ZoneFormComponent />
 </div>, document.getElementById('root'))

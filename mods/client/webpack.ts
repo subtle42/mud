@@ -2,6 +2,7 @@ import * as path from 'path'
 import webpack, { Configuration } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import WebpackDevServer from 'webpack-dev-server'
+// import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer'
 
 const config: Configuration = {
     mode: 'development',
@@ -30,9 +31,12 @@ const config: Configuration = {
             ],
         }]
     },
-    plugins: [new HtmlWebpackPlugin({
-        template: './index.html',
-    })],
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './index.html',
+        }),
+        // new BundleAnalyzerPlugin()
+    ],
 }
 
 
