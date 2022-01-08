@@ -12,6 +12,7 @@ render( <div>
     <NavComponent />
         <Routes>
             <Route path="/" element={<ZoneFormComponent />} />
+            <Route path="zones" element={<ZoneFormComponent />} />
             <Route path="rooms" element={<RoomFormComponent />} />
         </Routes>
     </BrowserRouter>

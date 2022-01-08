@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Badge from 'react-bootstrap/Badge'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { FaEdit, FaTrashAlt, FaTimes, FaEye } from 'react-icons/fa'
+import { ConfirmComponent } from '../components/confirm'
 
 const useZones = () => [
     'zone1', 'zone2', 'zone3'
@@ -34,17 +35,23 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
             </Form.Group>
             <Form.Group className="mb-3">
                 <div style={{display:'flex', justifyContent: 'flex-end'}}>
-                <Button variant="outline-primary">Save</Button>
-                <Button variant="outline-secondary"
-                    onClick={() => setSelected(undefined)}>Cancel</Button>
-
+                    <ConfirmComponent header='Confirm' message='Are you sure you want to save?'>
+                        <Button variant="outline-primary" onClick={() => alert('hi')}>Save</Button>
+                    </ConfirmComponent>
+                    <Button variant="outline-secondary" onClick={() => setSelected(undefined)}>
+                        Cancel
+                    </Button>
                 </div>
             </Form.Group>
         </Form>
     }
 
     const renderListItem = (item) => {
-        return <ListGroupItem key={item} style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center'}}>
+        return <ListGroupItem key={item}
+            style={{display: 'flex',
+            flexDirection: 'row',
+            justifyContent:'space-between',
+            alignItems: 'center'}}>
             {item}
             <div>
                 <Button variant="outline-info">
@@ -53,16 +60,17 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
                 <Button variant="outline-warning" onClick={() => setSelected({} as any)} >
                     <FaEdit color='warning' />
                 </Button>
+                <ConfirmComponent header={`Delete ${item}`} message='Are you sure you want to delete?'>
                 <Button variant="outline-danger">
                     <FaTrashAlt color="danger" />
                 </Button>
-                
+                </ConfirmComponent>
             </div>
         </ListGroupItem>
     }
 
     return <>
-        <Offcanvas show={selected} style={{width:500}} onHide={() => setSelected(undefined)}>
+        <Offcanvas show={selected} style={{width:500}}>
             <Offcanvas.Header closeButton>Edit</Offcanvas.Header>
             <Offcanvas.Body>{renderForm()}</Offcanvas.Body>
         </Offcanvas>
