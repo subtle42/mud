@@ -19,7 +19,6 @@ export const ConfirmComponent: React.FunctionComponent<Props> = (props: Props) =
 
     const open = (event: React.FormEvent<any>) => {
         if (event) event.stopPropagation()
-        console.log('hi')
         setOpen(true)
     }
 

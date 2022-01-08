@@ -38,7 +38,7 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
                     <ConfirmComponent header='Confirm' message='Are you sure you want to save?'>
                         <Button variant="outline-primary" onClick={() => alert('hi')}>Save</Button>
                     </ConfirmComponent>
-                    <Button variant="outline-secondary" onClick={() => setSelected(undefined)}>
+                    <Button style={{marginLeft: 8}} variant="outline-secondary" onClick={() => setSelected(undefined)}>
                         Cancel
                     </Button>
                 </div>
@@ -54,14 +54,11 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
             alignItems: 'center'}}>
             {item}
             <div>
-                <Button variant="outline-info">
-                    <FaEye color="info" />
-                </Button>
-                <Button variant="outline-warning" onClick={() => setSelected({} as any)} >
+                <Button style={{marginLeft: 8}} variant="outline-warning" onClick={() => setSelected({} as any)} >
                     <FaEdit color='warning' />
                 </Button>
                 <ConfirmComponent header={`Delete ${item}`} message='Are you sure you want to delete?'>
-                <Button variant="outline-danger">
+                <Button style={{marginLeft:8}} variant="outline-danger">
                     <FaTrashAlt color="danger" />
                 </Button>
                 </ConfirmComponent>
@@ -71,16 +68,22 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
 
     return <>
         <Offcanvas show={selected} style={{width:500}}>
-            <Offcanvas.Header closeButton>Edit</Offcanvas.Header>
+            <Offcanvas.Header>
+                <Offcanvas.Title>Zone Form</Offcanvas.Title>
+            </Offcanvas.Header>
             <Offcanvas.Body>{renderForm()}</Offcanvas.Body>
         </Offcanvas>
-        <Form>
-            <Form.Group>
+        <Form style={{marginBottom: 15}}>
+            <Form.Group className="mb-3">
                 <Form.Label>Search</Form.Label>
                 <Form.Control type="text"
                     value={query}
                     onChange={e => setQuery(e.target.value)}>
                 </Form.Control>
+            </Form.Group>
+
+            <Form.Group className="mb-3" style={{display: 'flex', justifyContent: 'center'}}>
+                <Button onClick={() => setSelected({} as any)}>Add Zone</Button>
             </Form.Group>
         </Form>
         <ListGroup>
