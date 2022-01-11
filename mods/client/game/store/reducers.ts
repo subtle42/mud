@@ -1,4 +1,4 @@
-import { MudStore } from "../store";
+import { MudStore } from ".";
 
 type ReducerMap = {[key:string]: (store: MudStore, payload: any)=>MudStore}
 

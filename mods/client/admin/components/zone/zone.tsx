@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Badge from 'react-bootstrap/Badge'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { FaEdit, FaTrashAlt, FaTimes, FaEye } from 'react-icons/fa'
-import { ConfirmComponent } from '../components/confirm'
+import { ConfirmComponent } from '../confirm'
 
 const useZones = () => [
     'zone1', 'zone2', 'zone3'

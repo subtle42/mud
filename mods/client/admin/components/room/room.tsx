@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button'
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 
-import { ConfirmComponent } from '../components/confirm'
+import { ConfirmComponent } from '../confirm'
 import { DirectionComponent } from './direction'
 
 const DIRECTIONS = ['north', 'south', 'east', 'west', 'up', 'down', 'in', 'out']

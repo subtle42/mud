@@ -6,7 +6,7 @@ import WebpackDevServer from 'webpack-dev-server'
 
 const config: Configuration = {
     mode: 'development',
-    entry: './index.tsx',
+    entry: './game/index.tsx',
     devtool: 'source-map',
     output: {
         path: path.resolve(__dirname, './.dist'),
