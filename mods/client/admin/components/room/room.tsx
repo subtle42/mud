@@ -63,14 +63,12 @@ export const RoomFormComponent:React.FunctionComponent = () => {
     const renderForm = ():JSX.Element => {
         if (!room) return <></>
         return <Form>
-            <Form.Group className="mb-3">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type='text'></Form.Control>
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <Form.Label>Description</Form.Label>
-                <textarea className='form-control'></textarea>
-            </Form.Group>
+            <Form.FloatingLabel label='Name' controlId='name-ctrl' className="mb-3">
+                <Form.Control type='text' placeholder='Name' />
+            </Form.FloatingLabel>
+            <Form.FloatingLabel label='Description' controlId='desc-ctrl' className="mb-3">
+                <Form.Control as='textarea' placeholder='Desc' style={{height: 200}} />
+            </Form.FloatingLabel>
             <DirectionComponent onAdd={addDirection} room={room} />
             <hr />
             <Form.Group className="mb-3">

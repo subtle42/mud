@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { NavComponent } from './components/nav'
 import { ZoneFormComponent } from './components/zone/zone'
 import { RoomFormComponent } from './components/room/room'
+import { MobComponent } from './components/mob/mob'
 import './admin.style.sass'
 
 render(<BrowserRouter>
@@ -15,6 +16,7 @@ render(<BrowserRouter>
             <Route path="/" element={<ZoneFormComponent />} />
             <Route path="zones" element={<ZoneFormComponent />} />
             <Route path="rooms" element={<RoomFormComponent />} />
+            <Route path="mobs" element={<MobComponent />} />
         </Routes>
         </div>
         </div>

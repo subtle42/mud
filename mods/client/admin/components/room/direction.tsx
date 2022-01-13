@@ -24,6 +24,8 @@ export const DirectionComponent: React.FunctionComponent<Props> = (props) => {
         setDirection('')
     }
 
+    const renderDirectionDD = () => {}
+
     return <Form.Group className="mb-3">
         <Form.Label>Connections</Form.Label>
         <div style={{display:'flex'}}>
