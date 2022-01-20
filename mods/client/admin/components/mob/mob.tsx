@@ -4,26 +4,37 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
-import { FaEdit, FaTrashAlt, FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaEdit, FaTrashAlt, FaChevronUp, FaChevronDown, FaSearch } from 'react-icons/fa'
 import { ConfirmComponent } from '../confirm'
+import { FormControl, InputGroup } from 'react-bootstrap'
 
 
 class Mob {}
 
-export const MobComponent: React.FC = () => {
+interface Props {
+    style?: React.CSSProperties
+}
+
+export const MobComponent: React.FC<Props> = (props) => {
     const [selected, setSelected] = React.useState<Mob|undefined>(undefined)
     const [isOpen, setOpen] = React.useState(false)
 
     const renderForm = ():JSX.Element => {
         if (!selected) return <></>
-        return <Form>
+        return <Form style={{padding:17}}>
             <Form.FloatingLabel label='Name' controlId='namecontrol' className='mb-3'>
-                <Form.Control type="text" placeholder='Name'></Form.Control>
+                <Form.Control type="text" placeholder='Name'>
+                </Form.Control>
             </Form.FloatingLabel>
             <Form.Group>
                 <Form.Label>Wanders</Form.Label>
                 <Form.Check type='checkbox'></Form.Check>
             </Form.Group>
+            <Form.Group></Form.Group>
+            <div>
+                <Button variant="outline-primary">Save</Button>
+                <Button variant="outline-secondary" onClick={() => setSelected(undefined)}>Cancel</Button>
+            </div>
         </Form>
     }
 
@@ -51,10 +62,25 @@ export const MobComponent: React.FC = () => {
         </ListGroup.Item>
     }
 
-    return <>
-        <ListGroup>
-            <ListGroup.Item style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}} onClick={() => setOpen(!isOpen)}>
+    const renderSearch = ():JSX.Element => {
+        if (!isOpen) return <></>
+        return <InputGroup onClick={e => e.stopPropagation()}>
+            <InputGroup.Text id="basic-addon1"><FaSearch /></InputGroup.Text>
+            <FormControl aria-describedby="basic-addon1"/>
+        </InputGroup>
+    }
+
+    return <div style={props.style}>
+        <ListGroup style={{border: 'none'}}>
+            <ListGroup.Item 
+                style={{display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}
+                onClick={() => setOpen(!isOpen)}>
                 Mobs
+                {renderSearch()}
                 {isOpen ? <FaChevronDown /> : <FaChevronUp />}
             </ListGroup.Item>
             <Collapse in={isOpen}>
@@ -67,5 +93,5 @@ export const MobComponent: React.FC = () => {
         <Offcanvas show={selected}>
             {renderForm()}
         </Offcanvas>
-    </>
+    </div>
 }

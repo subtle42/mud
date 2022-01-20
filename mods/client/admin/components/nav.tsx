@@ -24,6 +24,7 @@ export const NavComponent: React.FunctionComponent = () => {
                     {getMyLink('Rooms')}
                     {getMyLink('Items')}
                     {getMyLink('Mobs')}
+                    {getMyLink('Quests')}
                 </Nav>
             </Navbar.Collapse>
         </Container>
