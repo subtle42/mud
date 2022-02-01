@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import {AnyAction, createStore } from 'redux'
+import { pipe } from '@mud/utils'
 
 interface Option extends OptionInput {
     name: string
@@ -47,6 +48,7 @@ interface BuildCmd {
     (name: string, opts: CmdOpts, handler: BuildHandler): void
     (name: string, handler: BuildHandler): void
 }
+
 
 export const buildCmd: BuildCmd = (name, opts: any, builder?: Function, handler?) => {
     const tmp: Partial<Cmd> = {name, options: []}
@@ -98,6 +100,54 @@ export const getCmdsInSchool = (school: string): Cmd[] => {
         res.push(cmdStore.getState()[key].cmd)
     })
     return res
+}
+
+
+const handleErr = () => ''
+const formatInputString = (str: string) => str.split(' ').filter(x => x !== '')
+const demandOpt = (isDemanded: boolean) => (val: string):boolean|undefined => isDemanded && !!val
+const validatorOpt = (valFn?: (input: string)=>boolean) => (val:string):boolean|undefined => valFn && valFn(val)
+const typeOpt = (type?:string) => (val: string):boolean|undefined => !!type && typeof val === type
+const validateOption = (opt: Option) => (val: string): string|undefined => {
+    if (!demandOpt(opt.demand as boolean)(val)) return
+    if (!validatorOpt(opt.validator)(val)) return
+    if (!typeOpt(opt.type)(val)) return
+    return val
+}
+
+
+const buildArgs = pipe(
+    formatInputString,
+    (x) => ({
+        $0: x.shift() || '',
+        _: [...x]
+    })
+)
+const mapCmdName = (cmd?:Cmd) => (arg:Arguments):Arguments => {
+    if (!cmd) return arg
+    arg = {...arg}
+    if (arg.$0 !== arg.name) arg.$0 = cmd.name
+    return arg
+}
+
+const getValFromInput = (str:string) => {
+    const vals = formatInputString(str)
+    return (index: number): string => vals[index]
+}
+
+const fnRunCmd = (input: string) => (socket:Socket) => {
+    const cmd = pipe(buildArgs, x => x.$0, getCmd)(input)
+    if (!cmd) return handleErr()
+    const res = pipe(buildArgs, mapCmdName(cmd))(input)
+    
+    cmd.options.forEach((opt, i) => {
+        const val = pipe(
+            getValFromInput(input),
+            validateOption(opt)
+        )(i)
+        if (!val) return new Error('')
+        res[opt.name] = val
+    })
 }
 
 export const runCmd = (input: string, ack: (input: string | string[])=>void, socket: Socket): Promise<void> | void=> {

@@ -1,15 +1,27 @@
 import * as React from 'react'
-import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ListGroupItem from 'react-bootstrap/ListGroupItem'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import { Badge, FormControl, InputGroup } from 'react-bootstrap'
+import { FaSearch } from 'react-icons/fa'
 
 const useItems = () => {
-    return ['item1','item2']
+    return [
+        'item1','item2',
+        'item1','item2',
+        'item1','item2',
+        'item1','item2',
+        'item1','item2',
+    ]
 }
 
-export const AdminItemsComponent: React.FunctionComponent = () => {
+interface Props {
+    style?: React.CSSProperties
+    height: number
+}
+
+export const AdminItemsComponent: React.FC<Props> = (props) => {
     const [query, setQuery] = React.useState('')
     const [isOpen, setOpen] = React.useState(false)
     const [selected, setSelected] = React.useState({})
@@ -17,7 +29,7 @@ export const AdminItemsComponent: React.FunctionComponent = () => {
         .filter(i => (i.toLowerCase()).includes(query.toLowerCase()))
 
     const renderModal = ():JSX.Element => {
-        return <Modal show={isOpen} onHide={()=>setOpen(false)}>
+        return <Modal centered show={isOpen} onHide={()=>setOpen(false)}>
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>Edit item</Modal.Body>
             <Modal.Footer>
@@ -28,25 +40,27 @@ export const AdminItemsComponent: React.FunctionComponent = () => {
     }
 
     const renderInput = ():JSX.Element => {
-        return <Form>
-            <Form.Control 
+        return <InputGroup onClick={e => e.stopPropagation()}>
+        <InputGroup.Text id="basic-addon1"><FaSearch /></InputGroup.Text>
+            <FormControl aria-describedby="basic-addon1"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
             />
-        </Form>
+        </InputGroup>
     }
 
     const renderList = ():JSX.Element => {
-        return <ListGroup>
+        return <ListGroup style={{overflowY: 'scroll', height: props.height}}>
             {items.map(i => {
                 return <ListGroupItem>{i}</ListGroupItem>
             })}
         </ListGroup>
     }
 
-    return <>
+    return <div style={props.style}>
+        <h4>Items <Badge bg="secondary">{items.length}</Badge></h4>
         {renderModal()}
         {renderInput()}
         {renderList()}
-    </>
+    </div>
 }

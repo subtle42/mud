@@ -8,16 +8,16 @@ import { RoomFormComponent } from './components/room/room'
 import { MobComponent } from './components/mob/mob'
 import './admin.style.sass'
 import { QuestComponent } from './components/quests'
+import { MainComponent } from './components/main'
 
 render(<BrowserRouter>
     <NavComponent />
         <div style={{display:'flex', justifyContent:'center'}}>
-        <div style={{width: 600}}>
+        <div style={{width: 900}}>
         <Routes>
-            <Route path="/" element={<ZoneFormComponent />} />
+            <Route path="/" element={<MainComponent />} />
             <Route path="zones" element={<ZoneFormComponent />} />
             <Route path="rooms" element={<RoomFormComponent />} />
-            <Route path="mobs" element={<MobComponent />} />
             <Route path="quests" element={<QuestComponent />} />
         </Routes>
         </div>

@@ -30,8 +30,10 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Tags</Form.Label>
-                <h5><Badge>test <FaTimes /></Badge></h5>
-                <h5><Badge>test <FaTimes /></Badge></h5>
+                <h5>
+                    <Badge>test <FaTimes /></Badge>
+                    <Badge>test <FaTimes /></Badge>
+                </h5>
             </Form.Group>
             <Form.Group className="mb-3">
                 <div style={{display:'flex', justifyContent: 'flex-end'}}>

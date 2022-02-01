@@ -6,18 +6,23 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import { FaEdit, FaTrashAlt, FaChevronUp, FaChevronDown, FaSearch } from 'react-icons/fa'
 import { ConfirmComponent } from '../confirm'
-import { FormControl, InputGroup } from 'react-bootstrap'
+import { Badge, FormControl, InputGroup } from 'react-bootstrap'
 
 
 class Mob {}
 
 interface Props {
     style?: React.CSSProperties
+    height: number
 }
 
 export const MobComponent: React.FC<Props> = (props) => {
     const [selected, setSelected] = React.useState<Mob|undefined>(undefined)
-    const [isOpen, setOpen] = React.useState(false)
+    const css: React.CSSProperties = {
+        overflowY: 'scroll',
+        border: 'none',
+        height: props.height
+    }
 
     const renderForm = ():JSX.Element => {
         if (!selected) return <></>
@@ -49,11 +54,12 @@ export const MobComponent: React.FC<Props> = (props) => {
             <div>
                 <Button style={{marginLeft: 8}}
                     variant="outline-warning"
+                    size='sm'
                     onClick={() => setSelected(new Mob())}>
                     <FaEdit />
                 </Button>
                 <ConfirmComponent header={`Delete ${item}`} message='Are you sure you want to delete?'>
-                    <Button style={{marginLeft:8}}
+                    <Button size='sm' style={{marginLeft:8}}
                         variant="outline-danger">
                         <FaTrashAlt />
                     </Button>
@@ -63,7 +69,6 @@ export const MobComponent: React.FC<Props> = (props) => {
     }
 
     const renderSearch = ():JSX.Element => {
-        if (!isOpen) return <></>
         return <InputGroup onClick={e => e.stopPropagation()}>
             <InputGroup.Text id="basic-addon1"><FaSearch /></InputGroup.Text>
             <FormControl aria-describedby="basic-addon1"/>
@@ -71,25 +76,11 @@ export const MobComponent: React.FC<Props> = (props) => {
     }
 
     return <div style={props.style}>
-        <ListGroup style={{border: 'none'}}>
-            <ListGroup.Item 
-                style={{display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }}
-                onClick={() => setOpen(!isOpen)}>
-                Mobs
-                {renderSearch()}
-                {isOpen ? <FaChevronDown /> : <FaChevronUp />}
-            </ListGroup.Item>
-            <Collapse in={isOpen}>
-                <div>
-                    {[1,2,3].map(i => renderItem(i))}
-                </div>
-            </Collapse>
+        <h4>Mobs <Badge bg="secondary">{8}</Badge></h4>
+        {renderSearch()}
+        <ListGroup style={css}>
+            {[1,2,3,4,5,6,7,8].map(i => renderItem(i))}
         </ListGroup>
-
         <Offcanvas show={selected}>
             {renderForm()}
         </Offcanvas>
