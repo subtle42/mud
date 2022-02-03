@@ -4,9 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "npx ts-node webpack.ts client admin",
-    "dev:client": "npx ts-node webpack.ts client",
-    "dev:admin": "npx ts-node webpack.ts admin",
+    "dev": "npx ts-node webpack.ts",
     "build": "npx ts-node webpack.ts build",
     "test": "jest"
   },

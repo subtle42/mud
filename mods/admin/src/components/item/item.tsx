@@ -58,7 +58,7 @@ export const AdminItemsComponent: React.FC<Props> = (props) => {
     }
 
     return <div style={props.style}>
-        <h4>Items <Badge bg="secondary">{items.length}</Badge></h4>
+        <h4>Items <Badge bg="secondary">{useItems().length}</Badge></h4>
         {renderModal()}
         {renderInput()}
         {renderList()}
