@@ -6,7 +6,6 @@ import { NavComponent } from './components/nav'
 import { ZoneFormComponent } from './components/zone/zone'
 import { RoomFormComponent } from './components/room/room'
 import './style.sass'
-import { QuestComponent } from './components/quests'
 import { MainComponent } from './components/main'
 
 render(<BrowserRouter>
@@ -16,8 +15,8 @@ render(<BrowserRouter>
         <Routes>
             <Route path="/" element={<MainComponent />} />
             <Route path="zones" element={<ZoneFormComponent />} />
-            <Route path="rooms" element={<RoomFormComponent />} />
-            <Route path="quests" element={<QuestComponent />} />
+            {/* <Route path="rooms" element={<RoomFormComponent />} /> */}
+            {/* <Route path="quests" element={<QuestComponent />} /> */}
         </Routes>
         </div>
         </div>

@@ -3,11 +3,14 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ListGroupItem from 'react-bootstrap/ListGroupItem'
 import Button from 'react-bootstrap/Button'
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'
+import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 
 import { ConfirmComponent } from '../confirm'
 import { DirectionComponent } from './direction'
+import Badge from 'react-bootstrap/Badge'
+import { InputGroup } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 
 const DIRECTIONS = ['north', 'south', 'east', 'west', 'up', 'down', 'in', 'out']
 
@@ -17,29 +20,44 @@ export class Room {
 }
 const useZones = () => ['asdf1', 'asdf2', 'asdf3']
 
-export const RoomFormComponent:React.FunctionComponent = () => {
-    const zones = useZones()
-    const [zone, setZone] = React.useState(zones[0])
-    const [room, setRoom]: [Room, (a: Room|undefined)=>void] = React.useState(undefined as any)
+interface Props {
+    style?: React.CSSProperties
+    height: number
+}
 
-    const renderListItem = (item):JSX.Element => {
-        return <ListGroupItem key={item}
+export const RoomFormComponent:React.FC<Props> = (props: Props) => {
+    const css: React.CSSProperties = {
+        overflowY: 'scroll',
+        border: 'none',
+        height: props.height
+    }
+    const zones = useZones()
+    const [room, setRoom]: [Room, (a: Room|undefined)=>void] = React.useState(undefined as any)
+    const [query, setQuery] = React.useState('')
+
+    const renderItem = (item):JSX.Element => {
+        return <ListGroup.Item
+            key={item}
             style={{display: 'flex',
             flexDirection: 'row',
             justifyContent:'space-between',
             alignItems: 'center'}}>
             {item}
             <div>
-                <Button style={{marginLeft: 8}} variant="outline-warning" onClick={() => setRoom(new Room())} >
-                    <FaEdit color='warning' />
+                <Button style={{marginLeft: 8}}
+                    variant="outline-warning"
+                    size='sm'
+                    onClick={() => setRoom(new Room())}>
+                    <FaEdit />
                 </Button>
                 <ConfirmComponent header={`Delete ${item}`} message='Are you sure you want to delete?'>
-                    <Button style={{marginLeft:8}} variant="outline-danger">
-                        <FaTrashAlt color="danger" />
+                    <Button size='sm' style={{marginLeft:8}}
+                        variant="outline-danger">
+                        <FaTrashAlt />
                     </Button>
                 </ConfirmComponent>
             </div>
-        </ListGroupItem>
+        </ListGroup.Item>
     }
 
     const renderConnectionItem = (item):JSX.Element => {
@@ -84,7 +102,23 @@ export const RoomFormComponent:React.FunctionComponent = () => {
         </Form>
     }
 
-    return <>
+    const renderSearch = ():JSX.Element => {
+        return <InputGroup onClick={e => e.stopPropagation()}>
+            <InputGroup.Text id="basic-addon1"><FaSearch /></InputGroup.Text>
+            <FormControl aria-describedby="basic-addon1"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+            />
+        </InputGroup>
+    }
+
+    return <div style={props.style}>
+        <h4>Rooms <Badge bg="secondary">{8}</Badge></h4>
+        {renderSearch()}
+        <ListGroup style={css}>
+            {[1,2,3,4,5,6,7,8].map(i => renderItem(i))}
+        </ListGroup>
+
         <Offcanvas style={{width: 600}} show={room}>
             <Offcanvas.Header>
                 <Offcanvas.Title>Area Form</Offcanvas.Title>
@@ -93,22 +127,5 @@ export const RoomFormComponent:React.FunctionComponent = () => {
                 {renderForm()}
             </Offcanvas.Body>
         </Offcanvas>
-
-        <Form>
-            <Form.Group className="mb-3">
-                <Form.Label>Zone</Form.Label>
-                <Form.Select onChange={e => setZone(e.target.value)}>
-                    {zones.map(z => <option key={z} value={z}>{z}</option>)}
-                </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3" style={{display: 'flex', justifyContent: 'center'}}>
-                <Button disabled={zone === ''} onClick={() => setRoom(new Room())}>Add Room</Button>
-            </Form.Group>
-        </Form>
-
-        <ListGroup>
-            {renderListItem('asdf')}
-        </ListGroup>
-    </>
+    </div>
 }

@@ -7,6 +7,7 @@ import Badge from 'react-bootstrap/Badge'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { FaEdit, FaTrashAlt, FaTimes, FaEye } from 'react-icons/fa'
 import { ConfirmComponent } from '../confirm'
+import { createZone } from '../../hooks/actions'
 
 const useZones = () => [
     'zone1', 'zone2', 'zone3'
@@ -16,6 +17,12 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
     const [query, setQuery] = React.useState('')
     const zones = useZones().filter(z => z.toLowerCase().includes(query.toLowerCase()))
     const [selected, setSelected] = React.useState()
+
+    const sendCreateZone = () => {
+        createZone('awefwef')
+        .then(() => console.log('done'))
+        .catch(err => console.error(err))
+    }
 
     const renderForm = () => {
         if (!selected) return
@@ -86,6 +93,7 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
 
             <Form.Group className="mb-3" style={{display: 'flex', justifyContent: 'center'}}>
                 <Button onClick={() => setSelected({} as any)}>Add Zone</Button>
+                <Button onClick={() => sendCreateZone()}>Add Zone test</Button>
             </Form.Group>
         </Form>
         <ListGroup>
