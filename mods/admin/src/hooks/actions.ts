@@ -11,5 +11,9 @@ export const zone = {
     getAll: (): Promise<any[]> => {
         return axios.get(`/zone/all`)
         .then(res => res.data)
+    },
+    remove: (name: string): Promise<void> => {
+        return axios.delete(`/zone/${name}`)
+        .then(() => undefined)
     }
 }

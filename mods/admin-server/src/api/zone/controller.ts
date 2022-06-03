@@ -45,7 +45,6 @@ export const getAll = (req: Request, res: Response) => {
     listZones()
     .then(zones => res.json(zones))
     .catch(err => res.status(500).json(err))
-    res.json('in get all')
 }
 
 export const create = (req: Request, res: Response) => {
@@ -66,4 +65,18 @@ export const create = (req: Request, res: Response) => {
 
 export const update = (req: Request, res: Response) => {}
 
-export const remove = (req: Request, res: Response) => {}
+
+const removeFile = (name: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        fs.unlink(`${DATA_LOC}/${name}.yml`, (err) => {
+            if (err) return reject(err)
+            resolve()
+        })
+    })
+}
+
+export const remove = (req: Request, res: Response) => {
+    removeFile(req.params.id)
+    .then(() => res.json())
+    .catch(err => res.status(500).json(err))
+}

@@ -25,6 +25,12 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
         .catch(err => console.error(err))
     }
 
+    const sendRemoveZone = (name: string) => {
+        zone.remove(name)
+        .then(() => zone.getAll())
+        .catch(err => console.error(err))
+    }
+
     const isValid = ():boolean => {
         return zones.includes(zoneName) || zoneName.length === 0
     }
@@ -80,9 +86,11 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
                     <FaEdit color='warning' />
                 </Button>
                 <ConfirmComponent header={`Delete ${item}`} message='Are you sure you want to delete?'>
-                <Button style={{marginLeft:8}} variant="outline-danger">
-                    <FaTrashAlt color="danger" />
-                </Button>
+                    <Button style={{marginLeft:8}}
+                        variant="outline-danger"
+                        onClick={() => sendRemoveZone(item)}>
+                        <FaTrashAlt color="danger" />
+                    </Button>
                 </ConfirmComponent>
             </div>
         </ListGroupItem>
