@@ -2,6 +2,8 @@
 import * as io from 'socket.io'
 import { runCmd } from './cmds'
 
+import './cmds/basic'
+
 export const createServer = (): io.Server => {
     const server = new io.Server({
         allowRequest: (req, callback) => {
@@ -24,6 +26,7 @@ export const createServer = (): io.Server => {
                 runCmd(usrInput, ack, client)
             } catch(e) {
                 console.error(e)
+                ack(`Error: ${JSON.stringify(e)}`)
             }
         })
     })

@@ -7,7 +7,7 @@ import Badge from 'react-bootstrap/Badge'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { FaEdit, FaTrashAlt, FaTimes, FaEye } from 'react-icons/fa'
 import { ConfirmComponent } from '../confirm'
-import { createZone } from '../../hooks/actions'
+import { createZone, getZoneList } from '../../hooks/actions'
 
 const useZones = () => [
     'zone1', 'zone2', 'zone3'
@@ -17,9 +17,11 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
     const [query, setQuery] = React.useState('')
     const zones = useZones().filter(z => z.toLowerCase().includes(query.toLowerCase()))
     const [selected, setSelected] = React.useState()
+    const [name, setName] = React.useState('')
 
     const sendCreateZone = () => {
-        createZone('awefwef')
+        createZone(name)
+        .then(() => getZoneList())
         .then(() => console.log('done'))
         .catch(err => console.error(err))
     }
@@ -29,7 +31,10 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
         return <Form>
             <Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text"></Form.Control>
+                <Form.Control type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                />
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Description</Form.Label>
@@ -45,7 +50,7 @@ export const ZoneFormComponent: React.FunctionComponent = () => {
             <Form.Group className="mb-3">
                 <div style={{display:'flex', justifyContent: 'flex-end'}}>
                     <ConfirmComponent header='Confirm' message='Are you sure you want to save?'>
-                        <Button variant="outline-primary" onClick={() => alert('hi')}>Save</Button>
+                        <Button variant="outline-primary" onClick={sendCreateZone}>Save</Button>
                     </ConfirmComponent>
                     <Button style={{marginLeft: 8}} variant="outline-secondary" onClick={() => setSelected(undefined)}>
                         Cancel

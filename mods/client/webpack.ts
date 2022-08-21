@@ -34,7 +34,7 @@ const config: Configuration = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-        }),
+        }) as any
         // new BundleAnalyzerPlugin()
     ],
 }

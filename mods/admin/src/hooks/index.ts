@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { store } from '../store'
 
 const getWindowDim = ():{x: number, y: number} => {
     return {
@@ -35,3 +36,19 @@ export const useSideWindowHeight = (): number => {
     return height
 }
 
+export const useZones = (): string[] => {
+    const [zones, setZones] = React.useState(
+        store.getState().zones
+    )
+
+    React.useEffect(() => {
+        const unsubscribe = store.subscribe(() => {
+            const newZones = store.getState().zones
+            if (zones === newZones) return
+            setZones(newZones)
+        })
+        return () => unsubscribe()
+    }, [])
+
+    return zones
+}

@@ -11,10 +11,7 @@ const doesFileExist = (name: string):Promise<boolean> => {
     return new Promise((resolve, reject) => {
         fs.readdir(DATA_LOC, (err, files) => {
             if (err) return reject(err)
-            const toFind = files.find(f => {
-                console.log('filename', f)
-                return f === name
-            })
+            const toFind = files.find(f => f === name)
             resolve(!!toFind)
         })
     })
@@ -22,7 +19,7 @@ const doesFileExist = (name: string):Promise<boolean> => {
 
 const writeFile = (name: string):Promise<void> => {
     return new Promise((resolve, reject) => {
-        fs.writeFile(path.join(DATA_LOC, name), '', (err) => {
+        fs.writeFile(path.join(DATA_LOC, `${name}.yml`), '', (err) => {
             if (err) return reject(err)
             resolve()
         })
@@ -33,13 +30,23 @@ export const getOne = (req: Request, res: Response) => {
     res.json('in get one')
 }
 
+const getAllYmlFiles = (): Promise<string[]> => {
+    return new Promise((resolve, reject) => {
+        fs.readdir(DATA_LOC, (err, files) => {
+            if (err) return reject(err)
+            resolve(files.filter(f => f.includes('.yml')))
+        })
+    })
+}
+
 export const getAll = (req: Request, res: Response) => {
-    res.json('in get all')
+    getAllYmlFiles()
+    .then(zonesFiles => res.json(zonesFiles))
+    .catch(err => res.status(500).json(err))
 }
 
 export const create = (req: Request, res: Response) => {
     const toAdd = req.body
-    console.log('name', toAdd)
     const validRes = validate(toAdd, ZoneSchema)
     if (!validRes.valid) return res.status(500).json(validRes.errors)
 

@@ -1,13 +1,15 @@
 {
   "name": "mud",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "run-p dev:*",
+    "devAdmin": "run-p dev:admin:*",
     "dev:client": "yarn workspace client run dev",
     "dev:server": "yarn workspace server run dev",
+    "dev:admin:client": "yarn workspace admin run dev", 
+    "dev:admin:server": "yarn workspace admin-server run dev", 
     "test": "yarn workspaces run test"
   },
   "workspaces": [
