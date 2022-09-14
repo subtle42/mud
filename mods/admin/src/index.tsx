@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { NavComponent } from './components/nav'
 import { ZoneFormComponent } from './components/zone/zone'
-import { RoomFormComponent } from './components/room/room'
 import './style.sass'
 import { MainComponent } from './components/main'
 

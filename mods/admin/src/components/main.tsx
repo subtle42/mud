@@ -3,7 +3,7 @@ import { useSideWindowHeight } from '../hooks'
 import { AdminItemsComponent } from './item/item'
 import { MobComponent } from './mob/mob'
 import { QuestComponent } from './quest'
-import { RoomFormComponent } from './room/room'
+import { RoomComponent } from './room'
 
 
 export const MainComponent: React.FC = () => {
@@ -20,7 +20,7 @@ export const MainComponent: React.FC = () => {
             <AdminItemsComponent style={css} height={height} />
         </div>
         <div style={{width: '100%'}}>
-            <RoomFormComponent style={css} height={height} />
+            <RoomComponent style={css} height={height} />
             <QuestComponent style={css} height={height} />
         </div>
     </div>
