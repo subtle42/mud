@@ -51,8 +51,8 @@ export const AdminItemsComponent: React.FC<Props> = (props) => {
 
     const renderList = ():JSX.Element => {
         return <ListGroup style={{overflowY: 'scroll', height: props.height}}>
-            {items.map(i => {
-                return <ListGroupItem>{i}</ListGroupItem>
+            {items.map((i, index) => {
+                return <ListGroupItem key={index}>{i}</ListGroupItem>
             })}
         </ListGroup>
     }

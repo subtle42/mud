@@ -1,19 +1,20 @@
 import axios from 'axios'
+import { dispatch, store } from '../store'
 
-axios.defaults.baseURL = `http://localhost:3000`
+axios.defaults.baseURL = `http://localhost:3000/`
 
-export const zone = {
-    create: (name: string): Promise<void> => {
-        return axios.post('/zone', {
-            name
-        })
-    },
-    getAll: (): Promise<any[]> => {
-        return axios.get(`/zone/all`)
-        .then(res => res.data)
-    },
-    remove: (name: string): Promise<void> => {
-        return axios.delete(`/zone/${name}`)
-        .then(() => undefined)
-    }
+export const createZone = (name: string): Promise<void> => {
+    return axios.post('/zone', {
+        name
+    }, {
+        headers: {
+            'content-type': 'application/json'
+        }
+    })
+}
+
+export const getZoneList = (): Promise<void> => {
+    return axios.get(`zone`)
+    .then(res => store.dispatch(() => dispatch.zone.setAll(res.data)))
+    .then(() => undefined)
 }

@@ -10,9 +10,7 @@ const doesFileExist = (name: string):Promise<boolean> => {
     return new Promise((resolve, reject) => {
         fs.readdir(DATA_LOC, (err, files) => {
             if (err) return reject(err)
-            const toFind = files.find(f => {
-                return f === `${name}.yml`
-            })
+            const toFind = files.find(f => f === name)
             resolve(!!toFind)
         })
     })
@@ -31,19 +29,18 @@ export const getOne = (req: Request, res: Response) => {
     res.json('in get one')
 }
 
-const listZones = (): Promise<string[]> => {
+const getAllYmlFiles = (): Promise<string[]> => {
     return new Promise((resolve, reject) => {
         fs.readdir(DATA_LOC, (err, files) => {
             if (err) return reject(err)
-            // List only YML files
-            resolve(files.filter(f => f.includes(`.yml`)))
+            resolve(files.filter(f => f.includes('.yml')))
         })
     })
 }
 
 export const getAll = (req: Request, res: Response) => {
-    listZones()
-    .then(zones => res.json(zones))
+    getAllYmlFiles()
+    .then(zonesFiles => res.json(zonesFiles))
     .catch(err => res.status(500).json(err))
 }
 

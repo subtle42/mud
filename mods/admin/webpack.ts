@@ -48,7 +48,7 @@ if (args.includes('build')) {
     .run(() => {})
 } else {
     new WebpackDevServer({
-        port: 9000,
+        port: 9001,
         open: true
     }, webpack(config))
     .start()
