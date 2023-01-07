@@ -1,8 +1,12 @@
 
 import * as io from 'socket.io'
-import { runCmd } from './cmds'
+import { buildMsgr, runCmd } from './cmds'
+import { logger } from './logger'
 
 import './cmds/basic'
+import './bundles/rooms'
+import './bundles/skills'
+
 
 export const createServer = (): io.Server => {
     const server = new io.Server({
@@ -19,22 +23,19 @@ export const createServer = (): io.Server => {
             player: 'daniel'
         }
         client.send('connection successful.')
-        client.on('cmd', (usrInput: string, ack: (res:string|string[])=>void) => {
-            if (!ack) return client.emit('err', `Need ack function`)
-            console.log(`cmd: ${usrInput}`)
+        const messenger = buildMsgr(client)
+        client.on('cmd', (usrInput: string) => {
+            logger.info(`cmd: ${usrInput}`)
             try {
-                runCmd(usrInput, ack, client)
+                runCmd(usrInput, messenger)
             } catch(e) {
-                console.error(e)
-                ack(`Error: ${JSON.stringify(e)}`)
+                logger.error(e)
+                client.emit(`Error: ${JSON.stringify(e)}`)
             }
         })
     })
-    console.log('made server')
+    logger.info('made server')
     return server
 }
-
-import './bundles/rooms'
-import './bundles/skills'
 
 createServer().listen(3000)

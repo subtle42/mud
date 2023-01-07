@@ -50,47 +50,45 @@ const getCmdInfo = (cmd: string, school: string): string[] | string => {
 
 buildCmd('skill', {
     alias: 'sk'
-}, args => {
-    args.option('school', {
-        type: 'string',
-        desc: 'the school of skills you wish to learn about'
-    })
-    .option('skill', {
-        type: 'string',
-        desc: 'the invidivual skill you wish to learn about'
-    })
-}, (inputs, ack) => {
+})
+.option('school', {
+    desc: 'the school of skills you wish to learn about'
+})
+.option('skill', {
+    desc: 'the invidivual skill you wish to learn about'
+})
+.handler((inputs, socket) => {
     const {skill, school} = inputs
     if (!skill && !school) {
-        return ack(getMySkillSchools())
+        return socket.emit('msg', getMySkillSchools().join(' '))
     }
     else if (!skill && school) {
-        return ack(getSkillsInSchool(inputs.school as string))
+        return socket.emit('msg', getSkillsInSchool(inputs.school as string))
     } else if (skill && school) {
-        ack(getCmdInfo(inputs.skill as string, inputs.school as string))
+        socket.emit('msg', getCmdInfo(inputs.skill as string, inputs.school as string))
     }
 })
 
 buildCmd('swim', {
     school: SCHOOLS.survival,
     desc: 'You will try to swim'
-}, args => {
-    args.option('direction', {
-        validator: val => true,
-        demand: true
-    })
-}, (inputs, ack) => {
-    ack(`swimming toward the ${inputs.direction}`)
+})
+.option('direction', {
+    validateFn: val => true,
+    demand: true
+})
+.handler((inputs, socket) => {
+    socket.emit('msg', `swimming toward the ${inputs.direction}`)
 })
 
 buildCmd('climb', {
     school: SCHOOLS.survival,
     desc: 'You will try to climb'
-}, args => {
-    args.option('direction', {
-        validator: val => true,
-        demand: true
-    })
-}, (inputs, ack) => {
-    ack(`climbing toward ${inputs.direction}`)
+})
+.option('direction', {
+    validateFn: val => true,
+    demand: true
+})
+.handler((inputs, socket) => {
+    socket.emit('msg', `climbing toward ${inputs.direction}`)
 })

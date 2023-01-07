@@ -16,6 +16,7 @@
     "socket.io": "^4.4.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4",
+    "winston": "^3.8.2",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
@@ -23,10 +24,8 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-typescript": "^7.16.5",
     "@types/jest": "^27.0.3",
-    "@types/sinon": "^10.0.6",
     "jest": "^27.4.5",
-    "nodemon": "^2.0.15",
-    "sinon": "^12.0.1"
+    "nodemon": "^2.0.15"
   },
   "nodemonConfig": {
     "restartable": "rs",

@@ -49,11 +49,11 @@ const getRoomDescription = (roomdId: string): string[] => {
 
 buildCmd('glance', {
     desc: 'Look at an adjacent room',
-}, args => {
-    args.option('direction', {
-        demand: true
-    })
-}, (inputs, ack, socket) => {
+})
+.option('direction', {
+    demand: true
+})
+.handler((inputs, socket) => {
     const {direction} = inputs
     const player = socket.data.player
     const playerRoom = getPlayerRoom(player)
@@ -63,37 +63,19 @@ buildCmd('glance', {
         socket.emit('msg', getRoomDescription(playerRoom))
         // ack(getRoomDescription(playerRoom))
 
-        return handleError(`No exit towards the ${inputs.direction}.`, ack)
+        // return handleError(`No exit towards the ${inputs.direction}.`, ack)
     }
-    ack(getRoom(connection.roomId).desc)
+    socket.emit(getRoom(connection.roomId).desc)
 })
 
 
 buildCmd('north', {
     alias: 'n'
-}, (inputs, ack, socket) => {
+}).handler((inputs, socket) => {
     const playerName: string = socket.data.playerName
     const roomId = getPlayerRoom(playerName)
     const exit = getRoom(roomId).exits[inputs.$0] //.find(x => x.direction === inputs.$0)
-    if (!exit) return handleError(`There is no exit in direction: ${inputs.$0}`, ack)
+    if (!exit) return socket.emit(`There is no exit in direction: ${inputs.$0}`)
     movePlayer(playerName, exit.roomId)
-    ack(getRoom(exit.roomId).desc)
+    socket.emit(getRoom(exit.roomId).desc)
 })
-
-buildCmd('south', {
-    alias: 's'
-}, () => {
-})
-
-buildCmd('east', {
-    alias: 'e'
-}, () => {})
-
-buildCmd('west', {
-    alias: 'w'
-}, () => {})
-
-buildCmd('in', () => {})
-buildCmd('out', () => {})
-buildCmd('up', () => {})
-buildCmd('down', () => {})
