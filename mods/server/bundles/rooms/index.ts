@@ -1,9 +1,13 @@
 import { handleError, ingest } from "..";
 import { buildCmd } from "../../cmds";
 
-interface Room {
+type Direction = {
+    north?: string
+    south?: string
+}
+export interface Room {
     name: string
-    exits: {direction: string, roomId: string}[]
+    exits: {[Property in keyof Direction]: string}
     desc: string
     // items: string[]
     // mobs: string[]
@@ -20,15 +24,15 @@ const getPlayerRoom = (name: string) => 'testroom'
 const myRooms: {[key:string]: Room} = {
     testroom :{
     name: 'testroom',
-    exits: [{direction: 'north', roomId: 'northRoom'}],
+    exits: { north: 'northRoom' },
     desc: 'the first room',
 }, northRoom:{
     name: 'northRoom',
-    exits: [{direction: 'south', roomId: 'testroom'}],
+    exits: { south: 'testroom'} ,
     desc: 'the second room',
 }}
 
-const getRoom = (roomId: string): Room=> {
+export function getRoom (roomId: string): Room {
     return myRooms[roomId]
 }
 
@@ -39,7 +43,7 @@ const getRoomDescription = (roomdId: string): string[] => {
     return [
         room.name,
         room.desc,
-        room.exits.map(e =>  e.direction).join(', ')
+        Object.keys(room.exits).join(', ')
     ]
 }
 
@@ -53,9 +57,7 @@ buildCmd('glance', {
     const {direction} = inputs
     const player = socket.data.player
     const playerRoom = getPlayerRoom(player)
-    const connection = getRoom(playerRoom)
-        .exits
-        .find(e => e.direction === direction)
+    const connection = getRoom(playerRoom).exits[direction as any]
 
     if (!connection) {
         socket.emit('msg', getRoomDescription(playerRoom))
@@ -72,7 +74,7 @@ buildCmd('north', {
 }, (inputs, ack, socket) => {
     const playerName: string = socket.data.playerName
     const roomId = getPlayerRoom(playerName)
-    const exit = getRoom(roomId).exits.find(x => x.direction === inputs.$0)
+    const exit = getRoom(roomId).exits[inputs.$0] //.find(x => x.direction === inputs.$0)
     if (!exit) return handleError(`There is no exit in direction: ${inputs.$0}`, ack)
     movePlayer(playerName, exit.roomId)
     ack(getRoom(exit.roomId).desc)
