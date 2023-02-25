@@ -60,12 +60,12 @@ buildCmd('skill', {
 .handler((inputs, socket) => {
     const {skill, school} = inputs
     if (!skill && !school) {
-        return socket.emit('msg', getMySkillSchools().join(' '))
+        return socket.respond(getMySkillSchools().join(' '))
     }
     else if (!skill && school) {
-        return socket.emit('msg', getSkillsInSchool(inputs.school as string))
+        return socket.respond(getSkillsInSchool(inputs.school as string))
     } else if (skill && school) {
-        socket.emit('msg', getCmdInfo(inputs.skill as string, inputs.school as string))
+        socket.respond(getCmdInfo(inputs.skill as string, inputs.school as string))
     }
 })
 
@@ -78,7 +78,7 @@ buildCmd('swim', {
     demand: true
 })
 .handler((inputs, socket) => {
-    socket.emit('msg', `swimming toward the ${inputs.direction}`)
+    socket.respond(`swimming toward the ${inputs.direction}`)
 })
 
 buildCmd('climb', {
@@ -90,5 +90,5 @@ buildCmd('climb', {
     demand: true
 })
 .handler((inputs, socket) => {
-    socket.emit('msg', `climbing toward ${inputs.direction}`)
+    socket.respond(`climbing toward ${inputs.direction}`)
 })

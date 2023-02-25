@@ -1,15 +1,35 @@
 
 import * as io from 'socket.io'
+import express from 'express'
+import * as body from 'body-parser'
+import * as http from 'http'
 import { buildMsgr, runCmd } from './cmds'
 import { logger } from './logger'
+import { doesPlayerExist } from './bundles/players'
 
 import './cmds/basic'
 import './bundles/rooms'
 import './bundles/skills'
+import { createToken, decodeToken } from './auth'
 
 
-export const createServer = (): io.Server => {
-    const server = new io.Server({
+const app = express()
+const httpServer = http.createServer(app)
+
+app.use(body.json())
+app.post('/auth', (req, res) => {
+    const {username} = req.body
+    if (!doesPlayerExist(username)) {
+        return res.status(401).json({msg: `player: ${username} was not found`})
+    }
+    createToken({ username })
+    .then(token => res.json({token}))
+    .catch(err => res.status(401).json({msg: err}))
+})
+app.get('/', (req, res) => res.json('ack'))
+
+export const createWebsocketServer = (appServer: http.Server): io.Server => {
+    const server = new io.Server(appServer, {
         allowRequest: (req, callback) => {
             callback(null, true);
         },
@@ -24,6 +44,7 @@ export const createServer = (): io.Server => {
         }
         client.send('connection successful.')
         const messenger = buildMsgr(client)
+        
         client.on('cmd', (usrInput: string) => {
             logger.info(`cmd: ${usrInput}`)
             try {
@@ -34,8 +55,28 @@ export const createServer = (): io.Server => {
             }
         })
     })
+
+    // Auth section for sockets
+    // server.use((socket, next) => {
+    //     // Retuns error if no token is given
+    //     if (!socket.handshake.auth.token) {
+    //         logger.error(`no auth for connection`)
+    //         return next(new Error(`no auth for connection`))
+    //     }
+    //     decodeToken(socket.handshake.auth.token)
+    //     .then(data => {
+    //         socket.data = data
+    //         next()
+    //     })
+    //     .catch(err => next(new Error(err)))
+    // })
+
     logger.info('made server')
     return server
 }
 
-createServer().listen(3000)
+export const App = app
+
+if (process.env.NODE_ENV !== 'testing') {
+    createWebsocketServer(httpServer).listen(3000)
+}

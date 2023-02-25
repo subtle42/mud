@@ -85,7 +85,7 @@ describe('runCmd', () => {
     describe('cmd NOT found', () => {
         it('should call ack with an error msg', () => {
             const mockAck = jest.fn()
-            runCmd('awefawef', { emit: mockAck} as any)
+            runCmd('awefawef', { error: mockAck} as any)
             expect(mockAck).toHaveBeenCalledTimes(1)
             expect(typeof mockAck.mock.calls[0][0]).toEqual('string')
         })
@@ -102,7 +102,7 @@ describe('runCmd', () => {
                 .handler(mockHandler)
             })
             it('should NOT call handler if option is NOT given', () => {
-                runCmd(taskName, {emit: jest.fn()} as any)
+                runCmd(taskName, {error: jest.fn()} as any)
                 expect(mockHandler).not.toHaveBeenCalled()
             })
             it('should call the handler if all options are given', () => {
@@ -119,7 +119,7 @@ describe('runCmd', () => {
                 buildCmd(cmdName).option('opt', {
                     validateFn: validStub
                 })
-                runCmd(`${cmdName} awefg`, {emit: jest.fn()} as  any)
+                runCmd(`${cmdName} awefg`, {error: jest.fn()} as  any)
                 expect(validStub).toHaveBeenCalledTimes(1)
             })
 
@@ -138,11 +138,11 @@ describe('runCmd', () => {
                 })
                 it('should call ack with error', () => {
                     const ackMock = jest.fn()
-                    runCmd(`${cmdName} another`, {emit: ackMock} as any)
+                    runCmd(`${cmdName} another`, {error: ackMock} as any)
                     expect(ackMock).toHaveBeenCalled()
                 })
                 it('should NOT call the handler', () => {
-                    runCmd(`${cmdName} asdf asf`, {emit: jest.fn()} as any)
+                    runCmd(`${cmdName} asdf asf`, {error: jest.fn()} as any)
                     expect(handlerStub).not.toHaveBeenCalled()
                 })
             })

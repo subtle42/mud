@@ -12,7 +12,7 @@ type HandlerFn = (inputs: Arguments, socket: SocketMessenger) => void
 interface OptionOpts {
     demand?: boolean
     map?: (input:string) => any
-    validateFn?: (input:string) => boolean
+    validateFn?: (input) => boolean
     desc?: string
     helpText?: string
 }
@@ -70,7 +70,7 @@ export function buildCmd(name: string, opts: BuildOpts = {}) {
         name,
         options: [],
         handler: (inputs, socket) => {
-            console.error(`${inputs.$0} has not been implemented`)
+            logger.error(`${inputs.$0} has not been implemented`)
             socket.error(`${inputs.$0} has not been implemented`)
         },
         ...opts
@@ -104,6 +104,7 @@ export function runCmd(input: string, socket: SocketMessenger) {
                 return socket.respond(`${res.$0} ${cmd.options.map(o => `[${o.name}]`).join(' ')}`)
             }
             if (!val) continue
+            if (opt.map) res._[0] = opt.map(res._[0] as string)
             if (opt.validateFn && !opt.validateFn(val)) {
                 return socket.respond(`${res.$0} [${opt.name}], ${opt.helpText}`)
             }

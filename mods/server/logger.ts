@@ -2,7 +2,7 @@ import { createLogger, format, transport, transports } from "winston";
 
 
 export const logger = createLogger({
-    level: 'info',
+    level: 'critical',
     format: format.json(),
     transports: [
         new transports.Console()
